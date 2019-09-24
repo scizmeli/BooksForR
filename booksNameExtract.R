@@ -3,12 +3,12 @@ library(httr)
 library(rvest)
 library(tidyverse)
 library(dplyr)
-
+library(XML)
 
 #Getting all href links in the li element.
 url <- GET("https://r-pkgs.org")
 
-#This function scraps all chapter url and all subchapter urls.
+#This function scraps all chapter url and  subchapter urls.
 chapterLink <- function(){
   page <- read_html(url)
   
@@ -37,11 +37,8 @@ urlFunc <- function(x){
   node <- html_node(page,'h1')
   
   html_text(node)
-  #chapterURLS[x,2] <- cleanText
-}
-
-
-
+  
+  }
 
 
 #we can reach the all chapter names using any of the links
@@ -50,14 +47,10 @@ page <- read_html(chapterURLS$links[5])
 #getting chapter names
 chapterNumbers <- html_text(html_nodes(page,'a'))
 
-
 #Deleting manually duplicated chapter[1:2] == "R packages"
 #chapterNumbers[1:2] <- NULL
 #233 is the length(ChapterURLS)
 chapterURLS$ChapterName <-chapterNumbers[2 : 234]
-
-
-
 
 
 for(i in 1:length(OnlyChapter$DirtyText)){
@@ -68,8 +61,6 @@ for(i in 1:length(OnlyChapter$DirtyText)){
   
   node <- html_node
 }
-
-
 
 #saving the results 
 for(i in 1:length(chapterURLS[,1])){
@@ -89,15 +80,13 @@ for(x in 1:length(chapterURLS[,1])){
 }
 
 
-
-
-
-
 #This function accepts urls and give the outputs as div element of links
 parseSubChapterElements <- function(x){
   if( grepl( "#" , chapterURLS[x,1] )){
+    
     y <- regexpr( "\\#.*" , chapterURLS[8,1] )
-    div <- regmatches( chapterURLS[8,1],y )
+
+        div <- regmatches( chapterURLS[8,1],y )
     #page <- read_html(chapterURLS[8,1])
     #print("some sleep" , Sys.sleep(8))
     #node <- html_node(page, div)
@@ -109,9 +98,6 @@ parseSubChapterElements <- function(x){
     warning("This url is not subchapter")
   }
 }
-
-
-
 #This function accepts urls and give the outputs as div element of links 
 parseChapterElements <- function(x){
   if( !grepl( "#" , chapterURLS[x,1] )){
@@ -125,7 +111,6 @@ parseChapterElements <- function(x){
 }
 
 
-
 #Subsetting only chapters for after use if needed.
 OnlyChapter<-chapterURLS[chapterURLS$V3 == "Chapter",]
 OnlyChapter$Text <- OnlyChapter$links
@@ -133,13 +118,22 @@ OnlyChapter$Text <- OnlyChapter$links
 
 #Parsing all chapters texts(both text and code)
 getChapterText <- function(x){
+ 
   url <- GET(OnlyChapter[x,1])
+  
   Sys.sleep(55)
+  
   page <- read_html(url)
+  
   node <- html_node(page,'#section-')
+  
   cleanText <- html_text(node)
+  
   cleanText
 }
+
+
+
 for(x in 1:length(OnlyChapter[,1])){
   OnlyChapter[x,4] <- getChapterText(x)
   #  OnlyChapter[x,5] <- getDirtyText(x)
@@ -151,13 +145,18 @@ for(x in 1:length(OnlyChapter[,1])){
 
 
 
+
 #Creating new column for all chapters dirty html texts
 OnlyChapter$DirtyText <- OnlyChapter$ChapterName
 getDirtyText <- function(x){
   url <- GET(OnlyChapter[x,1])
+  
   Sys.sleep(30)
+  
   page <- read_html(url)
+  
   node <- html_node(page,'#section-')
+  
   node
 }
 for(x in 1:length(OnlyChapter[,1])){
@@ -167,86 +166,12 @@ for(x in 1:length(OnlyChapter[,1])){
 }
 
 
-
-parseSubChapterElements <- function(x){
-  if( grepl( "#" , chapterURLS[x,1] )){
-    y <- regexpr( "\\#.*" , chapterURLS[x,1] )
-    regmatches( chapterURLS[x,1],y )
-    #read_html(page,paste())
-  }else{
-    warning("This url is not subchapter")
-  }
-}
-
-
-#This function accepts urls and give the outputs as div element of links 
-parseChapterElements <- function(x){
-  if( !grepl( "#" , chapterURLS[x,1] )){
-    y <- gsub("https://r-pkgs.org/","",chapterURLS[x,1])
-    y <- gsub(".html","",y)
-    y
-  }else{
-    warning("This url is  not chapter")
-  }
-}
-
-
-parseChapterElements(1)
-read_html()
-
 #Searching for pattern
 x <- "aasd"
 y <- "s"
 grepl(y,x)
 
 
-
-html_tag(page,'#intro')
-
-
-parseSubChapterElements(5)
+save.image(file="subchaptersAvailable")
 
 
-attributes(node)
-
-
-extracingSubChapters <- function(){
-if(chapterURLS[x,3] == "Subchapter"){
-  page <- read_html(chapterURLS[x,1])
-
-  awsd1 <- html_node(page,'#intro-outline' ) 
-
-  for(x in 1:length(xml_parents(awsd1))){
-    #Something recursive 
-    #code gorunceye kadar devam et
-    #textleri birleştir
-    #code kısmına geçtiginde buraya kadar birlestirdgin textleri json olarak export et
-    #code kısmını export ettigin json cellinin altına ekle
-    #tekrar text görürsen aynı json cellinin altına devam et
-      }  
-  }
-  
-
-}
-
-
-
-
-
-# for(nodes in page){
-#     print(html_node(page,'#intro-outline' ))
-#   }
-
-# 
-# for(i in 1:length( OnlyChapter$links )){
-#   
-#   page <- read_html( OnlyChapter$DirtyText[[i]] )
-#   
-#   print(is.null(html_nodes(page,'.r'))) 
-#   html_text(html_nodes(page,'.r'))
-#   ax <- html_nodes(page,'.r')
-#   ax[1]
-# }
-
-
-save.image(file="environment1")
