@@ -13,8 +13,8 @@ chapterLink <- function(){
   page <- read_html(url)
   
   Sys.sleep(50)
- 
-   nodes <- html_nodes(page,'li.chapter a')
+  
+  nodes <- html_nodes(page,'li.chapter a')
   
   paste("https://r-pkgs.org/",html_attr(nodes,"href"),sep="")
 }
@@ -38,7 +38,7 @@ urlFunc <- function(x){
   
   html_text(node)
   
-  }
+}
 
 
 #we can reach the all chapter names using any of the links
@@ -84,15 +84,15 @@ for(x in 1:length(chapterURLS[,1])){
 parseSubChapterElements <- function(x){
   if( grepl( "#" , chapterURLS[x,1] )){
     
-    y <- regexpr( "\\#.*" , chapterURLS[8,1] )
-
-        div <- regmatches( chapterURLS[8,1],y )
+    y <- regexpr( "(?<=#).*" , chapterURLS[x,1] , perl = TRUE)
+    
+    div <- regmatches( chapterURLS[x,1],y )
     #page <- read_html(chapterURLS[8,1])
     #print("some sleep" , Sys.sleep(8))
     #node <- html_node(page, div)
+    return(div)
     
     
-    if(is.null(grepl("sourceCode r", node)))    
       #read_html(page,paste())
   }else{
     warning("This url is not subchapter")
@@ -103,7 +103,7 @@ parseChapterElements <- function(x){
   if( !grepl( "#" , chapterURLS[x,1] )){
     y <- gsub("https://r-pkgs.org/","",chapterURLS[x,1])
     div <- gsub(".html","",y)
-    
+    return(div)
     
   }else{
     warning("This url is  not chapter")
@@ -118,7 +118,7 @@ OnlyChapter$Text <- OnlyChapter$links
 
 #Parsing all chapters texts(both text and code)
 getChapterText <- function(x){
- 
+  
   url <- GET(OnlyChapter[x,1])
   
   Sys.sleep(55)
@@ -173,5 +173,3 @@ grepl(y,x)
 
 
 save.image(file="subchaptersAvailable")
-
-
