@@ -9,7 +9,6 @@ library(dplyr)
 library(XML)
 
 
-
 url <- GET("https://bookdown.org")
 Table<-readHTMLList(rawToChar(url$content))
 tablex <- read_html(rawToChar(url$content))
