@@ -9,10 +9,11 @@ library(XML)
 
 for(a in 1:length(jsonLists)){
   for(b in 1:length(jsonLists[[a]])){
-    if(grepl( "sourceCode" , jsonLists[[a]][[b]]) ){
+    if(names(jsonLists[[a]][[b]]) == "R" && grepl("sourceCode r",jsonLists[[a]][[b]])){
       
+      print(paste("a is:" , a , "  b is ", b))
       page <- read_html(jsonLists[[a]][[b]])
-
+      
       node <- html_nodes(page,'.sourceLine') 
       
       #create an empty character list for converted nodes
@@ -44,8 +45,9 @@ for(a in 1:length(jsonLists)){
       jsonLists[[a]][[b]] <- ""
       #remove html tags
       for(i in 1:length(code)){
-        code[[i]] <- paste(html_text(read_html(code[[i]])),sep=" ")
+        code[[i]] <- paste(html_text(read_html(code[[i]])),sep="\n")
         jsonLists[[a]][[b]]<- paste(jsonLists[[a]][[b]],code[[i]])
+        names(jsonLists[[a]][[b]]) <- "R"
       }
       
       
@@ -59,7 +61,8 @@ for(a in 1:length(jsonLists)){
 
 
 
-jsonLists <- jsonList
+
+# jsonLists <- jsonList
 
 
 

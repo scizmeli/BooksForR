@@ -7,7 +7,7 @@ for(i in 1:length(chapterURLS[,1])){
     }
 
 }
-
+ 
 #remove duplicates (eg: Sub chapters contains subsubchapters, 
 #2.8 contains 2.8.1 and 2.8.2,
 #so 2.8.1 chapter occurs 2 times.)
@@ -28,11 +28,17 @@ for(i in 1:length(jsonList)){
     }
   
 }
-    
+ 
+library(stringr)   
 # 
 # pattern <- "aaaa"
 # replace <- "This is DUPLICATED"
 # test <- list("XXXXXXXXX")
 
+for(i in 1:length(jsonList)){
+  for(j in 1:length(jsonList[[i]])){
+    names(jsonList[[i]][[j]]) <- names(chaptersList[[i]][[j]])
+     }
+}
 
 
