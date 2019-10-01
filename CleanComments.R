@@ -6,7 +6,7 @@ library(rvest)
 library(tidyverse)
 library(dplyr)
 library(XML)
-
+jsonLists <- chaptersList
 for(a in 1:length(jsonLists)){
   for(b in 1:length(jsonLists[[a]])){
     if(names(jsonLists[[a]][[b]]) == "R" && grepl("sourceCode r",jsonLists[[a]][[b]])){
@@ -45,7 +45,7 @@ for(a in 1:length(jsonLists)){
       jsonLists[[a]][[b]] <- ""
       #remove html tags
       for(i in 1:length(code)){
-        code[[i]] <- paste(html_text(read_html(code[[i]])),sep="\n")
+        code[[i]] <- paste(html_text(read_html(code[[i]])),"\n",sep="")
         jsonLists[[a]][[b]]<- paste(jsonLists[[a]][[b]],code[[i]])
         names(jsonLists[[a]][[b]]) <- "R"
       }
@@ -54,7 +54,7 @@ for(a in 1:length(jsonLists)){
       
       
     }else{
-      print("this is not a chapter")
+      print(paste("this is not a chapter","and i is:",i,"a and b is:   ", a, "and", b))
     }
   }
 }

@@ -107,7 +107,7 @@ for(i in 1:length(jsonList)){
 
 
 #Removing the html tags from code parts
-removeHtml <- function(i){
+for(i in 1:length(jsonList)){
   for(t in 1:length(jsonList[[i]])){
     if(grepl( "sourceCode" , jsonList[[i]][[t]]) ){
       jsonList[[i]][[t]] <-html_text(read_html(jsonList[[i]][[t]]))
