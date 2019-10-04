@@ -107,17 +107,37 @@ for(i in 1:length(jsonList)){
 
 
 #Removing the html tags from code parts
-for(i in 1:length(jsonList)){
-  for(t in 1:length(jsonList[[i]])){
-    if(grepl( "sourceCode" , jsonList[[i]][[t]]) ){
-      jsonList[[i]][[t]] <-html_text(read_html(jsonList[[i]][[t]]))
-      
-      
-    }else{
-      print(paste("There is no code in subchapter","   ", i,".","t"))
+# for(i in 1:length(jsonList)){
+#   for(t in 1:length(jsonList[[i]])){
+#     if(grepl( "sourceCode" , jsonList[[i]][[t]]) ){
+#       jsonList[[i]][[t]] <-html_text(read_html(jsonList[[i]][[t]]))
+#       
+#       
+#     }else{
+#       print(paste("There is no code in subchapter","   ", i,".","t"))
+#     }
+#   }
+# }
+
+
+
+#namecheck
+namecheck <- function(jsonList){
+if(class(jsonList) == "list" ){
+  for(i in 1:length(jsonList)){
+    for(t in 1:length(jsonList[[i]])){
+      if(is.null(names(jsonList[[i]][[t]]))){
+        print(paste("i:",i,"  t:",t,"  is no names"))
+  
+            }
+    
+      }
+    
+
     }
+
+}else{
+    print("This is not list")
   }
-}
 
-
-
+  }

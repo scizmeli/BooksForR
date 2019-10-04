@@ -1,18 +1,18 @@
 #This script decides given comment is comment output or not comment
 # example of comment output:: #> blah blah is an output
 # example of comment::  # this code blah   is a comment 
-library(httr)
-library(rvest)
-library(tidyverse)
+library(httr) 
+library(rvest) 
 library(dplyr)
 library(XML)
-jsonLists <- chaptersList
-for(a in 1:length(jsonLists)){
-  for(b in 1:length(jsonLists[[a]])){
-    if(names(jsonLists[[a]][[b]]) == "R" && grepl("sourceCode r",jsonLists[[a]][[b]])){
+cleanList <- chaptersList
+
+for(a in 1:length(cleanList)){
+  for(b in 1:length(cleanList[[a]])){
+    if(names(cleanList[[a]][[b]]) == "R" && grepl("sourceCode r",cleanList[[a]][[b]])){
       
       print(paste("a is:" , a , "  b is ", b))
-      page <- read_html(jsonLists[[a]][[b]])
+      page <- read_html(cleanList[[a]][[b]])
       
       node <- html_nodes(page,'.sourceLine') 
       
@@ -24,7 +24,7 @@ for(a in 1:length(jsonLists)){
         code[[i]] <- strsplit(as(node, "character"), "\n")[[i]]
       }
       
-      
+        
       #removing comment outputs
       for(j in 1:length(code)){
         
@@ -42,28 +42,20 @@ for(a in 1:length(jsonLists)){
       #remove NA's
       code <- code[!unlist(lapply(code, is.na))]
       
-      jsonLists[[a]][[b]] <- ""
+      cleanList[[a]][[b]] <- ""
       #remove html tags
       for(i in 1:length(code)){
         code[[i]] <- paste(html_text(read_html(code[[i]])),"\n",sep="")
-        jsonLists[[a]][[b]]<- paste(jsonLists[[a]][[b]],code[[i]])
-        names(jsonLists[[a]][[b]]) <- "R"
+        cleanList[[a]][[b]]<- paste(cleanList[[a]][[b]],code[[i]])
+        names(cleanList[[a]][[b]]) <- "R"
       }
       
       
       
       
     }else{
-      print(paste("this is not a chapter","and i is:",i,"a and b is:   ", a, "and", b))
+      print("this is not a chapter")
     }
   }
 }
-
-
-
-
-# jsonLists <- jsonList
-
-
-
 
