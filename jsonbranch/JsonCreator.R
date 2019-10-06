@@ -1,13 +1,15 @@
 #This script exports the chapters of "R Packages" book  as melda.io JSON format
 #just type the chapter number you want to export eg:  JsonCreator(1) exports chapter 1 as melda.io JSON format. 
 
+
+
 library(jsonlite)
 tjson <- jsonlite::fromJSON("input.json",simplifyDataFrame = FALSE)
 
 
 getChapterIndex <- function(){
   indexNums <<- list()
-  for(i in 3:length(jsonLists)){
+  for(i in 3:length(jsonList)){
     if(chapterURLS[i,3] == "Chapter"){
       indexNums <<- append(indexNums,i)
     }
@@ -15,7 +17,7 @@ getChapterIndex <- function(){
   indexNums
 }
 
-
+  
 
 getChapterIndex()
 
@@ -26,18 +28,28 @@ calculateChapter <- function(x){
     distance <- indexNums[[x + 1]] - indexNums[[x]]
     print(paste("chapter 1 is begin from index", indexNums[[x]],"ends in:",indexNums[[x + 1]],"total iteration:", distance))
     numberofcell <- 0
-    for(y in indexNums[[x]]: (indexNums[[x + 1]] + 1)){
+    for(y in indexNums[[x]]: (indexNums[[x + 1]])){
       for(u in 1:length(jsonList[[y]])){
         if(!is.null(jsonList[[y]][[u]])){
           numberofcell <- numberofcell + 1 
         }    
       }
     }
-    numberofcell
+    print("hel")
+    numberofcell - 2
   }else{
-    distance <- (length(chapterURLS[,1]) -2) - indexNums[[x]]
+    distance <- (length(chapterURLS[,1])) - indexNums[[x]]
     print(paste("chapter 1 is begin from index", indexNums[[x]],"ends in:",length(chapterURLS[,1]),"total iteration:", distance))
-    distance
+    numberofcell <- 0
+    for(y in indexNums[[x]]: length(chapterURLS[,1])){
+      for(u in 1:length(jsonList[[y]])){
+        if(!is.null(jsonList[[y]][[u]])){
+          numberofcell <- numberofcell + 1 
+        }    
+      }
+    }
+    print("hel")
+    numberofcell - 1
   }
   
   
@@ -68,13 +80,13 @@ JsonCreator<- function(x){
   z <<- 0
   tjson <<- jsonlite::fromJSON("input.json",simplifyDataFrame = FALSE)
   GO(x)
-  
   if(x != length(indexNums)){
-    for(i in indexNums[[x]]:(indexNums[[x+1]] + 1)){
+    for(i in indexNums[[x]]:(indexNums[[x+1]]  - 1 )){
       
       for(t in 1:length(jsonList[[i]])){
         
         if(names(jsonList[[i]][[t]]) == "HTML"){
+          print(paste("BEGINING HTML PART","j:" , j, "i:" , i, "and t is:" , t))
           
           #code:
           
@@ -97,15 +109,16 @@ JsonCreator<- function(x){
           
           tjson$project$stages[[1]][[8]][[j]][[10]][[1]][[1]][[1]] <<-jsonList[[i]][[t]]
           
-          print(paste("IN HTML PART","j:" , j, "i:" , i, "and t is:" , t))
+          print(paste("ENDING HTML PART","j:" , j, "i:" , i, "and t is:" , t))
           
           z <<- z +1
-          
+       
           j <<- j + 1
           
         }else if (names(jsonList[[i]][[t]]) == "R"){
+          print(paste("BEGINING R PART","j:" , j, "i:" , i, "and t is:" , t))
           
-          print(paste("i is:", i," t is:",t, " j is:",j ))
+          
           
           #code:
           
@@ -126,20 +139,34 @@ JsonCreator<- function(x){
           
           
           #output:
+          tjson$project$stages[[1]][[8]][[j]][[10]] <<- list()          
+
+          # evaluated
+          tjson$project$stages[[1]][[8]][[j]][[11]] <<- FALSE
           
-          tjson$project$stages[[1]][[8]][[2]][[10]][[1]]$text <-paste("[",z,"]"," ",'\"', jsonList[[i]][[t]],'\"')
+          #hiddenCode 
+          tjson$project$stages[[1]][[8]][[j]][[12]] <<- FALSE
           
-          tjson$project$stages[[1]][[8]][[2]][[10]][[1]]$name <-"stdout"
-          
-          
-          
-          print(paste("IN R PART","j:" , j, "i:" , i, "and t is:" , t))
+          print(paste("ENDING R PART","j:" , j, "i:" , i, "and t is:" , t))
           
           z <<- z +1
           
           j <<- j + 1
-          
         }
+        
+        # #name
+        # tjson$name <- "rpackages"
+        # 
+        # #stages$uri
+        # tjson$project$uri <- paste("suleyman-taspinar/","rpackages/",sep = "")
+        # #title
+        # tjson$project$title <-  "rpackages" 
+        # 
+        # #uri
+        # tjson$project$stages[[1]]$uri <- paste("suleyman-taspinar/","rpackages/","rpackages",sep="")
+        # 
+        # #title in stages
+        # tjson$project$stages[[1]]$title <- "rpackages"
         
         tjson$project$forkedFrom <<- "null"
         
@@ -155,9 +182,9 @@ JsonCreator<- function(x){
     }
     
     
-    output <<- toJSON(tjson,auto_unbox = TRUE)
+    output <<- toJSON(tjson,auto_unbox = TRUE,pretty = TRUE)
     
-    write(output,paste("RPackages/","chapter",x,".json"))
+    write(output,paste("RPackages/","chapter",x,".json",sep = ""))
     
   }else{
     for(i in indexNums[[x]]:length(jsonList)){
@@ -165,6 +192,7 @@ JsonCreator<- function(x){
       for(t in 1:length(jsonList[[i]])){
         
         if(names(jsonList[[i]][[t]]) == "HTML"){
+          print(paste("BEGINING AT HTML PART","j:" , j, "i:" , i, "and t is:" , t))
           
           #code:
           
@@ -187,7 +215,7 @@ JsonCreator<- function(x){
           
           tjson$project$stages[[1]][[8]][[j]][[10]][[1]][[1]][[1]] <<-jsonList[[i]][[t]]
           
-          print(paste("IN HTML PART","j:" , j, "i:" , i, "and t is:" , t))
+          print(paste("ENDING HTML PART","j:" , j, "i:" , i, "and t is:" , t))
           
           z <<- z +1
           
@@ -195,7 +223,7 @@ JsonCreator<- function(x){
           
         }else if (names(jsonList[[i]][[t]]) == "R"){
           
-          print(paste("i is:", i," t is:",t, " j is:",j ))
+          print(paste("BEGINNING OF  R PART","j:" , j, "i:" , i, "and t is:" , t))
           
           #code:
           
@@ -217,14 +245,12 @@ JsonCreator<- function(x){
           
           #output:
           
-          tjson$project$stages[[1]][[8]][[2]][[10]][[1]]$text <-paste("[",z,"]"," ",'\"', jsonList[[i]][[t]],'\"')
-          
-          tjson$project$stages[[1]][[8]][[2]][[10]][[1]]$name <-"stdout"
+          tjson$project$stages[[1]][[8]][[j]][[10]] <<- list()          
           
           
           
-          print(paste("IN R PART","j:" , j, "i:" , i, "and t is:" , t))
           
+          paste("ENDING OF  R PART","j:" , j, "i:" , i, "and t is:" , t)
           z <<- z +1
           
           j <<- j + 1
@@ -251,13 +277,14 @@ JsonCreator<- function(x){
     
   
     
-    
+      
     }
+
 
   
     }
-    
+        
 
-  
+    
 
   
