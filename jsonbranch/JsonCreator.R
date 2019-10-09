@@ -36,7 +36,7 @@ calculateChapter <- function(x){
       }
     }
     print("hel")
-    numberofcell - 2
+    numberofcell - 1
   }else{
     distance <- (length(chapterURLS[,1])) - indexNums[[x]]
     print(paste("chapter 1 is begin from index", indexNums[[x]],"ends in:",length(chapterURLS[,1]),"total iteration:", distance))
@@ -49,7 +49,7 @@ calculateChapter <- function(x){
       }
     }
     print("hel")
-    numberofcell - 1
+    numberofcell -1
   }
   
   
@@ -245,8 +245,7 @@ JsonCreator<- function(x){
           
           #output:
           
-          tjson$project$stages[[1]][[8]][[j]][[10]] <<- list()          
-          
+          tjson$project$stages[[1]][[8]][[j]][[10]] <<- list() 
           
           
           
