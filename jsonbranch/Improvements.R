@@ -32,6 +32,9 @@ for(a in 1:length(jsonList)){
 
 a <- "example"
 paste(a,"xy",sep="")
+
+
+
 #adding div elements with their id's to sbchapter and subsubchapter
 for( a in 1:length(jsonList) ){
   for( b in 1:length(jsonList[[a]]) ){
@@ -58,29 +61,35 @@ for( a in 1:length(jsonList) ){
 
 
 library(rvest)
+
+#redirecting urls changing href="chaptername#subchaptername" to href = "#subchaptername"
 for( a in 3:length(jsonList) ){
   for( b in 1:length(jsonList[[a]]) ){
-    if(names(jsonList[[a]][[b]]) == "HTML" && grepl("href=",jsonList[[a]][[b]])){
+    if( names ( jsonList[[a]][[b]] ) == "HTML" && grepl( "href=", jsonList[[a]][[b]] )){
       
-      page <- read_html(jsonList[[a]][[b]])
-      print(paste("reading page",a," ",b))
-      nodes <-html_nodes(page,"a")
-      nodes <- as(nodes,"character")
+      page <- read_html( jsonList[[a]][[b]] )
+      
+      print( paste( "reading page",a," ",b) )
+      
+      nodes <- html_nodes( page , "a" )
+      
+      nodes <- as( nodes,"character")
       
       
       for( i in 1:length(nodes) ) {
-        temp <- vector(mode="list", length = length(nodes))
-        tempList <- list()
+        temp <- vector( mode="list", length =  length(nodes) )
+      
+          tempList <- list()
         
-        if( grepl( "#", nodes[[i]] ) && ( nchar(str_match(nodes[[i]],'(?<=").*(?=")'))  < 60)  ){
+        if( grepl( "#", nodes[[i]] ) && ( nchar( str_match( nodes[[i]], '(?<=").*(?=")') )  < 60)  ){
           #<a href=\"whole-game.html#whole-game\">2</a> to <a href=\"#whole-game\">2</a> 
-          temp[[i]] <- gsub('(?<=\").*(?=#)',"",nodes[[i]],perl = TRUE)
+          temp[[i]] <- gsub( '(?<=\").*(?=#)',"", nodes[[i]], perl = TRUE)
           
           #applying the regexp to jsonList
-          tempList <-gsub(nodes[[i]],temp[[i]],jsonList[[a]][[b]])
+          tempList <-gsub( nodes[[i]], temp[[i]] , jsonList[[a]][[b]] )
           jsonList[[a]][[b]] <- tempList
 
-          print(paste("done","A is:",a,"B is:", b, "I is:" ,i))
+          print( paste( "done","A is:", a ,"B is:" , b , "I is:"  , i))
           names(jsonList[[a]][[b]] == "HTML")
           
         }else{
@@ -99,27 +108,36 @@ for( a in 3:length(jsonList) ){
   
 }
 
-hrefKeywords<-vector (mode ="list",length = length(jsonList))
-for( a in 3:length(jsonList) ){
-  for( b in 1:length(jsonList[[a]]) ){
-    print("Lol")
-    hrefKeywords[[a]] <- gsub("https://r-pkgs.org/","",chapterURLS[a,1])
-    
+
+
+
+#this function finds length of <href="chapter#subchapter">
+#to split links inside melda or outside melda
+hrefKeys<-function(){
+  
+  hrefKeywords<-vector (mode ="list",length = length(jsonList))
+  for( a in 3:length( jsonList ) ){
+    for( b in 1:length( jsonList[[a]]) ){
+      print("Lol")
       
+      hrefKeywords[[a]] <- gsub("https://r-pkgs.org/","",chapterURLS[a,1])
+      
+      max( nchar (hrefKeywords) )
+      
+    }
   }
 }
 
 
 
-nodes[[5]]
-regmatches(nodes[[i]],grep('(?<=").*(?=")',nodes[[i]],perl = TRUE))
 
-namecheck(jsonList)
+regmatches( nodes[[i]] , grep('(?<=").*(?=")', nodes[[i]] , perl = TRUE))
+
+namecheck( jsonList )
 
 
 
 nameBackup <- jsonList
-
 
 
 

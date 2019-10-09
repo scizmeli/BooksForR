@@ -4,7 +4,7 @@
       tjson <- jsonlite::fromJSON("input.json",simplifyDataFrame = FALSE)
       
       chapterNum <- 18
-      projectTitle <- "Rpackages-Hadleyy"
+      projectTitle <- "Rpackages-Hadley-The-Wickham-35"
       
       #creating empty li
       while(length(tjson$project$stages) != chapterNum){
@@ -163,8 +163,9 @@
           
           
         }else{
-        
-          for(i in indexNums[[x]]:length(jsonList)){
+          j <-1
+          z<- 0
+          for(i in indexNums[[x]]:(length(jsonList))){
             
             for(t in 1:length(jsonList[[i]])){
               
@@ -172,19 +173,18 @@
                 print(paste("BEGINING AT HTML PART","j:" , j, "i:" , i, "and t is:" , t))
                 
                 #code:
-                tjson$project$stages[[1]][[8]][[j]][[3]] <- jsonList[[i]][[t]]
+                tjson$project$stages[[x]][[8]][[j]][[3]] <- jsonList[[i]][[t]]
                 
                 #language:
-                tjson$project$stages[[1]][[8]][[j]][[4]] <- names(jsonList[[i]][[t]])
+                tjson$project$stages[[x]][[8]][[j]][[4]] <- names(jsonList[[i]][[t]])
                 
-                # index:
-                tjson$project$stages[[1]][[8]][[j]][[5]] <- z
+                #index:
+                tjson$project$stages[[x]][[8]][[j]][[5]] <- z
                 
                 print(paste("z is :", z))
                 
                 #output:
-                tjson$project$stages[[1]][[8]][[j]][[10]][[1]][[1]][[1]] <-jsonList[[i]][[t]]
-                
+                tjson$project$stages[[x]][[8]][[j]][[10]][[1]][[1]][[1]] <-jsonList[[i]][[t]]
                 
                 #evaluated
                 tjson$project$stages[[x]][[8]][[j]][[11]] <- TRUE
@@ -192,22 +192,21 @@
                 #hiddenCode 
                 tjson$project$stages[[x]][[8]][[j]][[12]] <- TRUE
                 
-                
                 print(paste("ENDING HTML PART","j:" , j, "i:" , i, "and t is:" , t))
-                z <<- z +1
-                j <<- j + 1
+                z <- z +1
+                j <- j + 1
               }else if (names(jsonList[[i]][[t]]) == "R"){
                 
                 print(paste("BEGINNING OF  R PART","j:" , j, "i:" , i, "and t is:" , t))
                 
                 #code:
-                tjson$project$stages[[1]][[8]][[j]][[3]] <- jsonList[[i]][[t]]
+                tjson$project$stages[[x]][[8]][[j]][[3]] <- jsonList[[i]][[t]]
                 
                 #language:
-                tjson$project$stages[[1]][[8]][[j]][[4]] <- names(jsonList[[i]][[t]])
+                tjson$project$stages[[x]][[8]][[j]][[4]] <- names(jsonList[[i]][[t]])
                 
                 #index:
-                tjson$project$stages[[1]][[8]][[j]][[5]] <- z
+                tjson$project$stages[[x]][[8]][[j]][[5]] <- z
                 
                 print(paste("z is :", z))
                 
@@ -218,39 +217,62 @@
                 tjson$project$stages[[x]][[8]][[j]][[12]] <- FALSE
                 
                 #output:
-                tjson$project$stages[[1]][[8]][[j]][[10]] <- list() 
+                tjson$project$stages[[x]][[8]][[j]][[10]] <- list() 
                 
                 paste("ENDING OF  R PART","j:" , j, "i:" , i, "and t is:" , t)
-                z <<- z +1
-                j <<- j + 1
+                z <- z +1
+                j <- j + 1
                 
               }
               
+              #project name
+              tjson$name <-tolower(projectTitle)
+              #project title
+              tjson$project$title <- tjson$name
+              #project uri
+              tjson$project$uri <- tolower(paste("suleyman-taspinar/",tjson$name,sep = ""))
+              
+              #order
+              tjson$project$stages[[x]][[7]][[1]] <- x - 1
+              
+              #stage uri
+              tjson$project$stages[[x]][[1]] <-paste(tjson$project$uri,"/",gsub(" ","-",chapterURLS[indexNums[[x]],2]),sep = "" ) 
+              
+              #stage name
+              tjson$project$stages[[x]][[3]] <-chapterURLS[indexNums[[x]],2]
+              
+              #stage title
+              tjson$project$stages[[x]][[1]] <- tolower(gsub(" ","-",chapterURLS[indexNums[[x]] , 2] ))
+              
+              #evaluated
+              tjson$project$stages[[x]][[8]][[j]][[11]] <- FALSE
+              
+              #hiddenCode 
+              tjson$project$stages[[x]][[8]][[j]][[12]] <- FALSE
+              
+              
+              
               tjson$project$forkedFrom <- "null"
-              
               tjson$project$rating <- 0
-              
               tjson$project$languages <- as.list(tjson$project$languages)
+              tjson$project$keywords<- as.list(tjson$project$keywords)
               
-              tjson$project$keywords <- as.list(tjson$project$keywords)
               
-              
+            }        
+            
             }
+        
         }
-        
-        
       }
       
 
-    }    
-      
-      
+   
       
     #deleting null elements
     for( x in 1:chapterNum ){
       lastElement <- length( tjson$project$stages[[x]][[8]] )
       if( tjson$project$stages[[x]][[8]][[lastElement]][[3]] == "<h2> FIRST HTML CELL</h2>" ){
-        print("DELETED")
+        print("NULL ELEMENT DELETED")
         tjson$project$stages[[x]][[8]][lastElement] <- NULL
         
         
@@ -287,4 +309,6 @@
       
       
       
+      
+
       

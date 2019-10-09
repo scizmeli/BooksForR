@@ -49,7 +49,7 @@ calculateChapter <- function(x){
       }
     }
     print("hel")
-    numberofcell -1
+    numberofcell 
   }
   
   
