@@ -3,7 +3,7 @@ library(rvest)
 library(tidyverse)
 library(dplyr)
 library(XML)
-#subChaptersList contains mess unsorted data.(only subchapters)
+#subsubChapterList contains mess unsorted data.(only subchapters)
 
 #tempList contains jsonLists + Chapters 
 
@@ -12,6 +12,11 @@ library(XML)
 #jsonLists containts clean code(only code and only comments)
 
 #creating name of div elements for each subchapter
+
+
+#first create an empty list for store the subchapters data
+subChapterList<- vector(mode ="list", length = length(chapterURLS[,1]))
+
 parseSubChapterElements <- function(x){
   if( grepl( "#" , chapterURLS[x,1] )){
     
@@ -31,52 +36,63 @@ parseSubChapterElements <- function(x){
 }
 
 #getting subchapters text and code
-getChapters <- function(x){
-  if(chapterURLS[x,3] == "SubChapter"){
-    random <- runif(1,min=25,max=55)
+getSubChapters <- function(x){
+  if(chapterURLS[x,3] != "Chapter"){
+    
+    random <- runif(1,min=15,max=65)
+    
     print(paste("Sleeping time is:", " ",random, "seconds" , sep = ""))
+    
     Sys.sleep(random)
     
-    page <- read_html(chapterURLS[x,1])
-    node <- html_nodes(page, parseSubChapterElements(x))
-    as.character(xml_children(node))
+     page <- read_html(chapterURLS[x,1])
+     
+     node <- html_node(page, paste("#",parseSubChapterElements(x),sep = ""))
+     
+     as(xml_children(node), "character")
     
+        # a function that returns NA regardless of what it's passed
+      
   }else{
+    
     mylist <- "This is a chapter."
+    
     mylist
   }
 }
 
 
-#scraping and saving the subchapters data
-# for(i in 10:length(chapterURLS[,1])){
-#   
-#   # chaptersList[[i]] <-getChapters(i)
-#   
-# }
+# scraping and saving the subchapters data
+for(i in 1:length(chapterURLS[,1])){
 
+  subChapterList[[i]] <- tryCatch(getSubChapters(i),error = function(e){NA})
+
+}
+
+
+html_text( subChapterList[[3]] )
 
 #subChapterList contains unsorted , mess data
-chaptersList <- subChaptersList
+subChapterList <- subsubChapterList
 #There are some  empty ( list character(0) )
-chaptersList[[164]] <- "EMPTY SUBCHAPTER"
-chaptersList[[165]] <- "EMPTY SUBCHAPTER"
-chaptersList[[60]] <- "EMPTY SUBCHAPTER"
-
+# subChapterList[[164]] <- "EMPTY SUBCHAPTER"
+# subChapterList[[165]] <- "EMPTY SUBCHAPTER"
+# subChapterList[[60]] <- "EMPTY SUBCHAPTER"
+# 
 
 
 mergeAndSortSubChapters <- function(i){
-  if(chaptersList[[i]] != chaptersList[[1]] || chaptersList[[i]] != chaptersList[[60]]){
+  if(subChapterList[[i]] != subChapterList[[1]] || subChapterList[[i]] != subChapterList[[60]]){
     temp <- vector(mode = "list",length= 20)  
     j <- 1
-    for(t in 1:length(chaptersList[[i]])) {
-      if(!grepl( "sourceCode" , chaptersList[[i]][[t]]) ){
+    for(t in 1:length(subChapterList[[i]])) {
+      if(!grepl( "sourceCode" , subChapterList[[i]][[t]]) ){
         
-        temp[[j]] <-paste(temp[[j]],chaptersList[[i]][[t]],"\n", sep="")
+        temp[[j]] <-paste(temp[[j]],subChapterList[[i]][[t]],"\n", sep="")
         names(temp[[j]]) <- "HTML"
       }else{
         j <- j + 1
-        temp[[ j ]] <- chaptersList[[i]][[t]]
+        temp[[ j ]] <- subChapterList[[i]][[t]]
         names(temp[[j]]) <- "R"
         j <- j + 1
       }
@@ -87,15 +103,15 @@ mergeAndSortSubChapters <- function(i){
   temp
 }
 #saving the sorted results
-for(i in 1:length(chaptersList)){
-  tryCatch(chaptersList[[i]] <- mergeAndSortSubChapters(i))
-  chaptersList[[i]] <- chaptersList[[i]][!unlist(lapply(chaptersList[[i]], is.null))]
+for(i in 1:length(subChapterList)){
+  tryCatch(subChapterList[[i]] <- mergeAndSortSubChapters(i))
+  subChapterList[[i]] <- subChapterList[[i]][!unlist(lapply(subChapterList[[i]], is.null))]
 }
 
 
 #deleting null elements.
 for(i in 1:length(jsonList)){
-  chaptersList[[i]] <- chaptersList[[i]][!unlist(lapply(chaptersList[[i]], is.null))]
+  subChapterList[[i]] <- subChapterList[[i]][!unlist(lapply(subChapterList[[i]], is.null))]
 }
 
 

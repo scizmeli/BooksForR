@@ -6,17 +6,16 @@ library(dplyr)
 library(XML)
 
 #Getting all href links in the li element.
-url <- GET("https://r-pkgs.org")
+url <- "https://r4ds.had.co.nz"
 
 #This function scraps all chapter url and  subchapter urls.
 chapterLink <- function(){
+  rnd <- runif(1,min = 32,max=74)
+  print(paste("system will sleep " , rnd, " seconds"))
+  Sys.sleep(rnd)
   page <- read_html(url)
-  
-  Sys.sleep(50)
-  
   nodes <- html_nodes(page,'li.chapter a')
-  
-  paste("https://r-pkgs.org/",html_attr(nodes,"href"),sep="")
+  paste(url,"/",html_attr(nodes,"href"),sep="")
 }
 
 
@@ -50,26 +49,13 @@ chapterNumbers <- html_text(html_nodes(page,'a'))
 #Deleting manually duplicated chapter[1:2] == "R packages"
 #chapterNumbers[1:2] <- NULL
 #233 is the length(ChapterURLS)
-chapterURLS$ChapterName <-chapterNumbers[2 : 234]
+chapterURLS$ChapterName <-chapterNumbers[2 : (length(chapterURLS[,1]) + 1)]
 
 
-for(i in 1:length(OnlyChapter$DirtyText)){
-  
-  page <-read_html(OnlyChapter$DirtyText[[1]])
-  html_nodes(page,'#.r')
-  html_text(page)
-  
-  node <- html_node
-}
-
-#saving the results 
-for(i in 1:length(chapterURLS[,1])){
-  chapterURLS[i,2] <- urlFunc(i)
-}
 
 
 #creating new column
-chapterURLS$Chapter <- chapterURLS$V2
+chapterURLS$Chapter <- chapterURLS$links
 
 
 #assigning the chapter urls chapter or subchapter
@@ -79,6 +65,15 @@ for(x in 1:length(chapterURLS[,1])){
            chapterURLS[x,3] <-"SubChapter" )
 }
 
+#check for double dot
+#if double dot occurs , this is a subchapter of a subchapter.
+for(i in 1:length(chapterURLS[,1])){
+  if(chapterURLS[i,3] == "SubChapter" && str_count(substr(chapterURLS[i,2],1,10),"\\.") == 2){
+    chapterURLS[i,3] <- "SubSubChapter"
+    print(paste(i,". is done"))
+  }
+  
+}
 
 #This function accepts urls and give the outputs as div element of links
 parseSubChapterElements <- function(x){
@@ -98,6 +93,7 @@ parseSubChapterElements <- function(x){
     warning("This url is not subchapter")
   }
 }
+
 #This function accepts urls and give the outputs as div element of links 
 parseChapterElements <- function(x){
   if( !grepl( "#" , chapterURLS[x,1] )){
@@ -109,67 +105,3 @@ parseChapterElements <- function(x){
     warning("This url is  not chapter")
   }
 }
-
-
-#Subsetting only chapters for after use if needed.
-OnlyChapter<-chapterURLS[chapterURLS$V3 == "Chapter",]
-OnlyChapter$Text <- OnlyChapter$links
-
-
-#Parsing all chapters texts(both text and code)
-getChapterText <- function(x){
-  
-  url <- GET(OnlyChapter[x,1])
-  
-  Sys.sleep(55)
-  
-  page <- read_html(url)
-  
-  node <- html_node(page,'#section-')
-  
-  cleanText <- html_text(node)
-  
-  cleanText
-}
-
-
-
-for(x in 1:length(OnlyChapter[,1])){
-  OnlyChapter[x,4] <- getChapterText(x)
-  #  OnlyChapter[x,5] <- getDirtyText(x)
-}
-
-
-
-
-
-
-
-
-#Creating new column for all chapters dirty html texts
-OnlyChapter$DirtyText <- OnlyChapter$ChapterName
-getDirtyText <- function(x){
-  url <- GET(OnlyChapter[x,1])
-  
-  Sys.sleep(30)
-  
-  page <- read_html(url)
-  
-  node <- html_node(page,'#section-')
-  
-  node
-}
-for(x in 1:length(OnlyChapter[,1])){
-  
-  OnlyChapter[x,5] <- as.character(getDirtyText(x))
-  
-}
-
-
-#Searching for pattern
-x <- "aasd"
-y <- "s"
-grepl(y,x)
-
-
-save.image(file="subchaptersAvailable")
