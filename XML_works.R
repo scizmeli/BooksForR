@@ -19,7 +19,7 @@ subChapterList<- vector(mode ="list", length = length(chapterURLS[,1]))
 
 parseSubChapterElements <- function(x){
   if( grepl( "#" , chapterURLS[x,1] )){
-    
+    chapterURLS[x,1] <- gsub("([+.])","\\\\\\1", chapterURLS[x,1])
     y <- regexpr( "(?<=#).*" , chapterURLS[x,1] , perl = TRUE)
     
     div <- regmatches( chapterURLS[x,1],y )
@@ -65,32 +65,28 @@ getSubChapters <- function(x){
 # scraping and saving the subchapters data
 for(i in 1:length(chapterURLS[,1])){
 
-  subChapterList[[i]] <- tryCatch(getSubChapters(i),error = function(e){NA})
+  subChapterList[[i]] <- tryCatch(getSubChapters(i),error = function(e){"NA"})
 
 }
 
 
-html_text( subChapterList[[3]] )
 
 #subChapterList contains unsorted , mess data
-subChapterList <- subsubChapterList
-#There are some  empty ( list character(0) )
-# subChapterList[[164]] <- "EMPTY SUBCHAPTER"
-# subChapterList[[165]] <- "EMPTY SUBCHAPTER"
-# subChapterList[[60]] <- "EMPTY SUBCHAPTER"
-# 
 
 
 mergeAndSortSubChapters <- function(i){
-  if(subChapterList[[i]] != subChapterList[[1]] || subChapterList[[i]] != subChapterList[[60]]){
-    temp <- vector(mode = "list",length= 20)  
+  if( chapterURLS[i,3] != "Chapter"){
+    temp <- vector(mode = "list",length= 30)  
     j <- 1
+    print(paste("this is BEGINNING and i is:",i))
+    
     for(t in 1:length(subChapterList[[i]])) {
-      if(!grepl( "sourceCode" , subChapterList[[i]][[t]]) ){
-        
+      if(!grepl( "sourceCode r" , subChapterList[[i]][[t]]) ){
+        print(paste("this is html chunk and i is:",i,", t is:", t))
         temp[[j]] <-paste(temp[[j]],subChapterList[[i]][[t]],"\n", sep="")
         names(temp[[j]]) <- "HTML"
       }else{
+        print(paste("this is sourceCode chunk and i is:",i,", t is:", t))
         j <- j + 1
         temp[[ j ]] <- subChapterList[[i]][[t]]
         names(temp[[j]]) <- "R"
@@ -102,38 +98,15 @@ mergeAndSortSubChapters <- function(i){
   }  
   temp
 }
+
 #saving the sorted results
-for(i in 1:length(subChapterList)){
-  tryCatch(subChapterList[[i]] <- mergeAndSortSubChapters(i))
-  subChapterList[[i]] <- subChapterList[[i]][!unlist(lapply(subChapterList[[i]], is.null))]
-}
-
-
-#deleting null elements.
-for(i in 1:length(jsonList)){
+for( i in 3:length(subChapterList) ){
+  subChapterList[[i]] <- mergeAndSortSubChapters(i)
   subChapterList[[i]] <- subChapterList[[i]][!unlist(lapply(subChapterList[[i]], is.null))]
 }
 
 
 
 
-
-
-
-
-
-#Removing the html tags from code parts
-for(i in 1:length(jsonList)){
-  for(t in 1:length(jsonList[[i]])){
-    if(grepl( "sourceCode" , jsonList[[i]][[t]]) ){
-      jsonList[[i]][[t]] <-html_text(read_html(jsonList[[i]][[t]]))
-      
-      
-    }else{
-      print(paste("There is no code in subchapter","   ", i,".","t"))
-    }
-  }
-}
-
-
+ 
 

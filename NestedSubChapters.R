@@ -15,24 +15,23 @@ for(i in 1:length(chapterURLS[,1])){
 for(i in 3:(length(jsonList)-1)){
   if(chapterURLS[i,3] == "SubChapter" && chapterURLS[i + 1,3] == "SubSubChapter"){
     print(paste("Subchapters which have subchapters:  " , i ,"  ."))
-
-
+    chr <- strsplit(subChapterList[[i]] , "\n")
     jsonList[[i]] <- ""
-    for(z in 1:length(subChaptersList[[i]])){
-        temp <- vector(mode = "list",length= 20)
+    for(z in 1:length(subChapterList[[i]])){
+        temp <- vector(mode = "list",length= 30)
         j <- 1
-        for(t in 1:length(subChaptersList[[i]])) {
-          if(grepl(paste("<div id=", '\"', parseSubChapterElements(i+1),'\"',sep=""),subChaptersList[[i]][[t]])){
+        for(t in 1:length(chr[[1]])) {
+          if(grepl(paste("<div id=", '\"', parseSubChapterElements(i+1),'\"',sep=""),chr[[1]][[t]])){
             print(paste("j is " , z, "and break" ))
             break()
           }
-          else if(!grepl( "sourceCode" , subChaptersList[[i]][[t]]) ){
+          else if(!grepl( "sourceCode" , chr[[1]][[t]]) ){
 
-            temp[[j]] <-paste(temp[[j]],subChaptersList[[i]][[t]],"\n", sep="")
+            temp[[j]] <-paste(temp[[j]],chr[[1]][[t]],"\n", sep="")
             names(temp[[j]]) <- "HTML"
           }else{
             j <- j + 1
-            temp[[ j ]] <-subChaptersList[[i]][[t]]
+            temp[[ j ]] <-chr[[1]][[t]]
             names(temp[[j]]) <- "R"
             j <- j + 1
           }

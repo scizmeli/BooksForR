@@ -45,11 +45,8 @@ page <- read_html(chapterURLS$links[5])
 
 #getting chapter names
 chapterNumbers <- html_text(html_nodes(page,'a'))
-
-#Deleting manually duplicated chapter[1:2] == "R packages"
-#chapterNumbers[1:2] <- NULL
-#233 is the length(ChapterURLS)
-chapterURLS$ChapterName <-chapterNumbers[2 : (length(chapterURLS[,1]) + 1)]
+chapterNumbers <- chapterNumbers[-1]
+chapterURLS$ChapterName <-chapterNumbers[1 : (length(chapterURLS[,1]) )]
 
 
 
@@ -78,6 +75,7 @@ for(i in 1:length(chapterURLS[,1])){
 #This function accepts urls and give the outputs as div element of links
 parseSubChapterElements <- function(x){
   if( grepl( "#" , chapterURLS[x,1] )){
+    chapterURLS[x,1] <- gsub("([+.])","\\\\\\1", chapterURLS[x,1])
     
     y <- regexpr( "(?<=#).*" , chapterURLS[x,1] , perl = TRUE)
     
@@ -97,11 +95,19 @@ parseSubChapterElements <- function(x){
 #This function accepts urls and give the outputs as div element of links 
 parseChapterElements <- function(x){
   if( !grepl( "#" , chapterURLS[x,1] )){
-    y <- gsub("https://r-pkgs.org/","",chapterURLS[x,1])
+    y <- gsub( paste(url,"/",sep="") , "" , chapterURLS[x,1] )
     div <- gsub(".html","",y)
+    div <- gsub("([+.])","\\\\\\1", div)
+    
     return(div)
     
   }else{
     warning("This url is  not chapter")
   }
+}
+
+for(a in 1:length(jsonList)){
+      print(a)
+      names(jsonList[[a]]) <- chapterURLS[a,2]
+  
 }

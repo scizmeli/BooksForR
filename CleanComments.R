@@ -6,18 +6,19 @@ library(rvest)
 library(tidyverse)
 library(dplyr)
 library(XML)
-jsonLists <- chaptersList
-for(a in 1:length(jsonLists)){
-  for(b in 1:length(jsonLists[[a]])){
-    if(names(jsonLists[[a]][[b]]) == "R" && grepl("sourceCode r",jsonLists[[a]][[b]])){
+
+
+for(a in 1:length(jsonList)){
+  for(b in 1:length(jsonList[[a]])){
+    if(names(jsonList[[a]][[b]]) == "R" && grepl("sourceCode r",jsonList[[a]][[b]])){
       
       print(paste("a is:" , a , "  b is ", b))
-      page <- read_html(jsonLists[[a]][[b]])
+      page <- read_html(jsonList[[a]][[b]])
       
-      node <- html_nodes(page,'.sourceLine') 
-      
+      node <- html_nodes(page,".sourceCode") 
+      node<- as(node,"character")
       #create an empty character list for converted nodes
-      code <-vector(mode="character", length = length(as(node,"character")))
+      code <-list()
       
       #Convert nodes as character
       for (i in 1:length(as(node,"character"))){
@@ -40,14 +41,14 @@ for(a in 1:length(jsonLists)){
       
       
       #remove NA's
-      code <- code[!unlist(lapply(code, is.na))]
+      code <- code[!unlist(lapply(code, is.null))]
       
-      jsonLists[[a]][[b]] <- ""
+      jsonList[[a]][[b]] <- ""
       #remove html tags
       for(i in 1:length(code)){
         code[[i]] <- paste(html_text(read_html(code[[i]])),"\n",sep="")
-        jsonLists[[a]][[b]]<- paste(jsonLists[[a]][[b]],code[[i]])
-        names(jsonLists[[a]][[b]]) <- "R"
+        jsonList[[a]][[b]]<- paste(jsonList[[a]][[b]],code[[i]])
+        names(jsonList[[a]][[b]]) <- "R"
       }
       
       
@@ -62,7 +63,6 @@ for(a in 1:length(jsonLists)){
 
 
 
-# jsonLists <- jsonList
 
 
 
