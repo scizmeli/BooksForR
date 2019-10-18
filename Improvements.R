@@ -25,18 +25,8 @@ namecheck <- function(jsonList){
   
 }
 
-for( i in 1 : length(jsonList) ){
-  for( t in 1 : length(jsonList[[i]]) ){
-    if( is.null(names(jsonList[[i]][[t]])) ){
-      names( jsonList[[i]][[t]]) <- "HTML"
-      print(paste("i:",i,"\\n t is:", t))
-      
-            }
-    
-  }
-}
 
-names(jsonList[[418]][[1]]) <- "HTML"
+
 
 #closing div brackets in Chapter poarts!
 for( a in 3:length( jsonList ) ){
@@ -77,11 +67,10 @@ namecheck(jsonList)
 ##Comment the install.packages code
 for(a in 1: (length(jsonList) -1)){
   for(b in 1:length(jsonList[[a]])){
-    if(names(jsonList[[a]][[b]])  == "R" && grepl(paste("install.packages"), jsonList[[a]][[b]]) && grepl("#",jsonList[[a]][[b]]) != TRUE){
+    if(names(jsonList[[a]][[b]])  == "R" && grepl(paste("install.packages"), jsonList[[a]][[b]]) ){
       print(paste("There is a R code cell includes install.package:   ",a," :a ", b, " :b "))
       jsonList[[a]][[b]] <- gsub("install.packages","#install.packages",jsonList[[a]][[b]])
     }else{
-        print(paste("There is no R code cell includes install.package",a," : ",b))
       }
   }
 }
@@ -97,6 +86,7 @@ for( a in 1:length(jsonList) ){
       if( !grepl( "<div id=" , substring( jsonList[[a]][[1]],1,10) ) ){
         jsonList[[a]][[1]] <- paste( paste( "<div id=", '\"', parseSubChapterElements(a),'\"',">",sep = "" )  , jsonList[[a]][[1]], sep ="")
          jsonList[[a]][[1]] <- paste( jsonList[[a]][[1]], paste( "</div>", sep ="" ) )
+         names( jsonList[[a]][[1]] ) <- "HTML"
         print(paste("this is a " ,a, b,"AND",         parseSubChapterElements(a)))
       }
       

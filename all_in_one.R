@@ -3,8 +3,8 @@ library(jsonlite)
 
 tjson <- jsonlite::fromJSON("input.json",simplifyDataFrame = FALSE)
 
-chapterNum <- 30
-projectTitle <- "R-For-Data-Science-test"
+chapterNum <- 29
+projectTitle <- "R-For-Data-Science-Test6"
 
 #creating empty li
 while(length(tjson$project$stages) != chapterNum){

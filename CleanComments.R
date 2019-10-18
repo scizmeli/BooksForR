@@ -7,7 +7,6 @@ library(tidyverse)
 library(dplyr)
 library(XML)
 
-
 for(a in 1:length(jsonList)){
   for(b in 1:length(jsonList[[a]])){
     if(names(jsonList[[a]][[b]]) == "R" && grepl("sourceCode r",jsonList[[a]][[b]])){
@@ -15,42 +14,31 @@ for(a in 1:length(jsonList)){
       print(paste("a is:" , a , "  b is ", b))
       page <- read_html(jsonList[[a]][[b]])
       
-      node <- html_nodes(page,".sourceCode") 
-      node<- as(node,"character")
+      node <- html_nodes(page,'code.sourceCode.r') 
+      node <- xml_contents(node)
+      node <- html_text(node)
+      node<- as( node ,"character")
+      
+      
       #create an empty character list for converted nodes
-      code <-list()
-      
+      code <-vector(mode = "list" , length= length(node))
+      j <- 1
       #Convert nodes as character
-      for (i in 1:length(as(node,"character"))){
-        code[[i]] <- strsplit(as(node, "character"), "\n")[[i]]
-      }
-      
-      
-      #removing comment outputs
-      for(j in 1:length(code)){
-        
-        if(grepl("#",html_text(read_html(code[[j]]))) && grepl("#>",html_text(read_html(code[[j]])))){
-          print("This is a comment")
-          code[[j]] <- NA
-          print("line is deleted")
-          
+      for (i in 1: length(node)  ){
+        if( grepl( "#",node[[i]] ) && grepl("#>",node[[i]])){
+          print(i)
+          j <- j + 1
         }else{
-          print("this is not line")
+          print(paste(i,"and: ", j))
+          code[[j]] <- paste( code[[j]], node[[i]] , sep = "")
         }
+        
       }
-      
-      
       #remove NA's
       code <- code[!unlist(lapply(code, is.null))]
       
-      jsonList[[a]][[b]] <- ""
-      #remove html tags
-      for(i in 1:length(code)){
-        code[[i]] <- paste(html_text(read_html(code[[i]])),"\n",sep="")
-        jsonList[[a]][[b]]<- paste(jsonList[[a]][[b]],code[[i]])
-        names(jsonList[[a]][[b]]) <- "R"
-      }
-      
+      jsonList[[a]][[b]] <- code[[1]]
+      names(jsonList[[a]][[b]] ) <- "R"      
       
       
       

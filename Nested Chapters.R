@@ -10,8 +10,8 @@ library(XML)
 
 
 #this loops scrapes the chapters and stores in tempList
-  for(i in 3:length( chapterURLS[,1])){
-    if(chapterURLS[[i,3]] == "Chapter" ){
+for(i in 3:length(jsonList)){ 
+   if(chapterURLS[[i,3]] == "Chapter" ){
       print(paste("i is ", i , " and  url is: ", chapterURLS[i,1], " \n the json is "))
       rnd <- runif(1,min = 35,max=54)
       print(paste("system will sleep " , rnd, " seconds"))

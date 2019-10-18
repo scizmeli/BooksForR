@@ -9,7 +9,7 @@ tjson <- jsonlite::fromJSON("input.json",simplifyDataFrame = FALSE)
 
 getChapterIndex <- function(){
   indexNums <<- list()
-  for(i in 3:length(jsonList)){
+  for(i in 2:length(jsonList)){
     if(chapterURLS[i,3] == "Chapter"){
       indexNums <<- append(indexNums,i)
     }
