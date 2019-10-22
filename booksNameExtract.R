@@ -108,6 +108,6 @@ parseChapterElements <- function(x){
 
 for(a in 1:length(jsonList)){
       print(a)
-      names(jsonList[[a]]) <- chapterURLS[a,2]
+      names(jsonList)[[a]] <- chapterURLS[a,2]
   
 }

@@ -3,8 +3,8 @@ library(jsonlite)
 
 tjson <- jsonlite::fromJSON("input.json",simplifyDataFrame = FALSE)
 
-chapterNum <- 29
-projectTitle <- "R-For-Data-Science-Test6"
+chapterNum <- 9
+projectTitle <- "Tidy-Text-Mining-tst1925"
 
 #creating empty li
 while(length(tjson$project$stages) != chapterNum){
@@ -268,7 +268,7 @@ for(x in 1:chapterNum){
 
 
 
-#deleting null elements
+#deleting null elements in TidyTextMining run this loop 2 times.
 for( x in 1:chapterNum ){
   lastElement <- length( tjson$project$stages[[x]][[8]] )
   if( tjson$project$stages[[x]][[8]][[lastElement]][[3]] == "<h2> FIRST HTML CELL</h2>" ){
@@ -296,8 +296,8 @@ for( x in 1:chapterNum ){
 
 #saving as melda.io json format
 output <- toJSON(tjson,auto_unbox = TRUE)
+bookname <-"TidyTextMiningTESt"
 
-write(minify(output),paste("r-for-data-science",x,".json",sep = ""))
-
+write(minify(output),paste(bookname,".json",sep = ""))
 
 

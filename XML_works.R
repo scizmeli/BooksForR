@@ -73,6 +73,7 @@ for(i in 1:length(chapterURLS[,1])){
 
 #subChapterList contains unsorted , mess data
 
+temp <- vector(mode = "list",length= 30)  
 
 mergeAndSortSubChapters <- function(i){
   if( chapterURLS[i,3] != "Chapter"){
@@ -101,11 +102,14 @@ mergeAndSortSubChapters <- function(i){
 
 #saving the sorted results
 for( i in 3:length(subChapterList) ){
-  subChapterList[[i]] <- mergeAndSortSubChapters(i)
-  subChapterList[[i]] <- subChapterList[[i]][!unlist(lapply(subChapterList[[i]], is.null))]
+  if( chapterURLS[i,3] != "Chapter"){
+    
+    subChapterList[[i]] <- mergeAndSortSubChapters(i)
+    subChapterList[[i]] <- subChapterList[[i]][!unlist(lapply(subChapterList[[i]], is.null))]
+
+  }
+
 }
-
-
 
 
  

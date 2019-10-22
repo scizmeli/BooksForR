@@ -10,7 +10,7 @@ library(XML)
 
 
 #this loops scrapes the chapters and stores in tempList
-for(i in 3:length(jsonList)){ 
+for(i in 3:length(subChapterList)){ 
    if(chapterURLS[[i,3]] == "Chapter" ){
       print(paste("i is ", i , " and  url is: ", chapterURLS[i,1], " \n the json is "))
       rnd <- runif(1,min = 35,max=54)
@@ -30,7 +30,7 @@ for(i in 3:length(jsonList)){
   }
 
   
-for(i in 3: length(subChapterList) ){
+  for(i in 3: length(subChapterList) ){
 
     subChapterList[[i]] <- tryCatch(completeBook(i) , error = function(e){NA} )
 }

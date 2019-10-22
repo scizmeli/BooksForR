@@ -92,8 +92,8 @@ for( a in 1:length(jsonList) ){
       
     }    
     
-    
-    
+    #fig:tidyflow-ch2
+    fig:tidyflow-ch2
     
     
     }
@@ -186,8 +186,8 @@ for( a in 3: ( length(jsonList) -1 ) ){
       nodes <- html_nodes( page , "a" )
       
       nodes <- as( nodes,"character")
-      
-      
+  
+          
       for( i in 1:length(nodes) ) {
         temp <- vector( mode="list", length =  length(nodes) )
         
@@ -234,3 +234,61 @@ for( a in 3: ( length(jsonList) -1 ) ){
   }
   
 }
+
+
+for( a in 3: ( length(jsonList) -1 ) ) {
+  for( b in 1:length(jsonList[[a]]) ){
+    if(grepl( "img src", jsonList[[a]][[b]] )){
+      
+      page <- read_html( jsonList[[a]][[b]] )
+      
+      print( paste( "reading page",a," ",b) )
+      
+      nodes <- html_nodes( page , "img" )
+      
+      nodes <- as( nodes,"character")
+      
+      
+      for( i in 1:length(nodes) ) {
+        temp <- vector( mode="list", length =  length(nodes) )
+        
+        
+        if(grepl("img src" ,substr(nodes[[i]] , 1 , 17) )){
+          
+          #if hrefs in chapters not contains http
+         
+            #<a href=\"whole-game.html#whole-game\">2</a> to <a href=\"#whole-game\">2</a> 
+          # <img src=\"
+            z <- paste("<img src=",'\"',sep="")
+            sentence<-paste(z,url,"/", sep = "")
+            
+            temp[[i]] <- gsub(z,sentence,nodes[[i]])
+            
+            #escaping speacial characters
+            nodes[[i]] <- gsub("([+.])","\\\\\\1", nodes[[i]])
+            
+            #applying the regexp to jsonList
+            tempList <-gsub( nodes[[i]], temp[[i]] , jsonList[[a]][[b]] )
+            
+            jsonList[[a]][[b]] <- tempList
+            
+            print( paste( "done","A is:", a ,"B is:" , b , "I is:"  , i))
+            
+          
+            temp[[i]] <- "lolo"
+            print(paste("NNNNOOTTdone","A is:",a,"B is:", b, "I is:" ,i))
+            
+     
+        
+        
+        
+      }
+      
+      }
+      
+    }
+    
+  }
+  
+}
+
