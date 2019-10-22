@@ -1,10 +1,61 @@
 library(jsonlite)
-#Hole book in one JSON
 
+#Hole book in one JSON
 tjson <- jsonlite::fromJSON("input.json",simplifyDataFrame = FALSE)
 
-chapterNum <- 29
-projectTitle <- "R-For-Data-Science-Test6"
+chapterNum <- 32
+projectTitle <- "Fundamentals-ofData-Visualizationss"
+
+
+
+getChapterIndex <- function(){
+  indexNums <<- list()
+  for(i in 2:length(jsonList)){
+    if(chapterURLS[i,3] == "Chapter"){
+      indexNums <<- append(indexNums,i)
+    }
+  }
+  indexNums
+}
+
+
+
+getChapterIndex()
+
+
+#this function calculates how many cells in one chapter.
+calculateChapter <- function(x){
+  if(x != length(indexNums)){
+    distance <- indexNums[[x + 1]] - indexNums[[x]]
+    print(paste("chapter 1 is begin from index", indexNums[[x]],"ends in:",indexNums[[x + 1]],"total iteration:", distance))
+    numberofcell <- 0
+    for(y in indexNums[[x]]: (indexNums[[x + 1]])){
+      for(u in 1:length(jsonList[[y]])){
+        if(!is.null(jsonList[[y]][[u]])){
+          numberofcell <- numberofcell + 1 
+        }    
+      }
+    }
+    print("hel")
+    numberofcell - 1
+  }else{
+    distance <- (length(chapterURLS[,1])) - indexNums[[x]]
+    print(paste("chapter 1 is begin from index", indexNums[[x]],"ends in:",length(chapterURLS[,1]),"total iteration:", distance))
+    numberofcell <- 0
+    for(y in indexNums[[x]]: length(chapterURLS[,1])){
+      for(u in 1:length(jsonList[[y]])){
+        if(!is.null(jsonList[[y]][[u]])){
+          numberofcell <- numberofcell + 1 
+        }    
+      }
+    }
+    print("hel")
+    numberofcell 
+  }
+  
+  
+}
+
 
 #creating empty li
 while(length(tjson$project$stages) != chapterNum){
@@ -49,7 +100,7 @@ for(x in 1:chapterNum){
       
       for(t in 1:length(jsonList[[i]])){
         
-        if(names(jsonList[[i]][[t]]) == "HTML"){
+        if(TRUE){
           print(paste("BEGINING HTML PART","j:" , j, "i:" , i, "and t is:" , t," x is:" , x))
           
           #code:
@@ -57,7 +108,7 @@ for(x in 1:chapterNum){
           
           
           #language:
-          tjson$project$stages[[x]][[8]][[j]][[4]] <- names(jsonList[[i]][[t]])
+          tjson$project$stages[[x]][[8]][[j]][[4]] <- "HTML"
           
           
           # index:
@@ -79,7 +130,7 @@ for(x in 1:chapterNum){
           z <- z +1
           j <- j + 1
           
-        }else if (names(jsonList[[i]][[t]]) == "R"){
+        }else if (FALSE){
           print(paste("BEGINING R PART","j:" , j, "i:" , i, "and t is:" , t," x is:" , x))
           
           #code:
@@ -297,7 +348,7 @@ for( x in 1:chapterNum ){
 #saving as melda.io json format
 output <- toJSON(tjson,auto_unbox = TRUE)
 
-write(minify(output),paste("r-for-data-science",x,".json",sep = ""))
+write(minify(output),paste("r-visualizaton",x,".json",sep = ""))
 
 
 

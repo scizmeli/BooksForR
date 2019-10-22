@@ -8,12 +8,12 @@ library(dplyr)
 library(XML)
 
 
-
+jsonList <- subChapterList
 #this loops scrapes the chapters and stores in tempList
-for(i in 3:length(jsonList)){ 
+for(i in 1:length(jsonList)){ 
    if(chapterURLS[[i,3]] == "Chapter" ){
       print(paste("i is ", i , " and  url is: ", chapterURLS[i,1], " \n the json is "))
-      rnd <- runif(1,min = 35,max=54)
+      rnd <- runif(1,min = 35,max=124)
       print(paste("system will sleep " , rnd, " seconds"))
       Sys.sleep(rnd)
       
@@ -43,53 +43,49 @@ for(i in 3: (length(jsonList) - 1)){
     print(paste("This is the begining i is :" ,i ))
      chr <- strsplit(subChapterList[[i]] , "\n")
      jsonList[[i]] <- ""
-     for(z in 1:length( jsonList[[i]] )){
        temp <- vector(mode = "list",length= 20)
        j <- 1
         for(t in 1:length(chr[[1]])){
-          if(chapterURLS[i + 1, 3] != "Chapter"){
+          if(chapterURLS[i + 1, 3] != "Chapter" && length(chr[[1]][[t]]) != 0 ){
             print(paste("the next is NOTT chapter and i is:", i))
             if( grepl(paste("<div id=", '\"', parseSubChapterElements(i+1),'\"',sep=""),chr[[1]][[t]]) ){
               print(paste("j is " , j, "and break" ))
               break()
               
-            }else if(!grepl( "sourceCode" , chr[[1]][[t]]) ){
+            }else{
               
               temp[[j]] <-paste(temp[[j]],chr[[1]][[t]],"\n", sep="")
               names(temp[[j]]) <- "HTML"
-            }else{
-              j <- j + 1
-              temp[[ j ]] <-chr[[1]][[t]]
-              names(temp[[j]]) <- "R"
-              j <- j + 1
-              
             }
-          }else if (chapterURLS[i + 1, 3] == "Chapter"){
+          }else if (chapterURLS[i + 1, 3] == "Chapter" && length(chr[[1]][[t]]) != 0){
             print(paste("the next is chapter and i is:", i))
-            if( grepl(paste("<div id=", '\"', parseChapterElements(i+1),'\"',sep=""),chr[[1]][[t]]) ){
+            if( grepl(paste("<div id=", '\"', parseChapterElements(i+1),'\"',sep=""),chr[[1]][[t]])  && length(chr[[1]][[t]]) != 0){
               print(paste("j is " , j, "and break" ))
               break()
               
-            }else if(!grepl( "sourceCode r" , chr[[1]][[t]]) ){
+            }else{
               
               temp[[j]] <-paste(temp[[j]],chr[[1]][[t]],"\n", sep="")
               names(temp[[j]]) <- "HTML"
-            }else{
-              j <- j + 1
-              temp[[ j ]] <-chr[[1]][[t]]
-              names(temp[[j]]) <- "R"
-              j <- j + 1
-              
             }
           }
         }
     
-     }
+     
    jsonList[[i]] <- temp
    jsonList[[i]]<- jsonList[[i]][!unlist(lapply(jsonList[[i]], is.null))]
 
 
   }
 }
+
+for(i in 3: (length(jsonList))){
+  if(chapterURLS[i , 3] == "Chapter"  ){
+    jsonList[[i]] <- as.character(jsonList[[i]][[1]])
+  }
+  
+  }
+
+
 
 #save.image()
