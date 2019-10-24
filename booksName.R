@@ -1,6 +1,7 @@
 #!/usr/bin/env Rscript
-#Some changes.
 
+
+#install.packages("XML")
 
 library(httr)
 library(rvest)
@@ -9,12 +10,14 @@ library(dplyr)
 library(XML)
 
 
+
 url <- GET("https://bookdown.org")
 Table<-readHTMLList(rawToChar(url$content))
 tablex <- read_html(rawToChar(url$content))
 
 
 
+#install.packages(c("httr", "rvest", "tidyverse", "XML"),dependencies =  TRUE)
 
 
 
@@ -28,7 +31,7 @@ booksAuthors <- function(){
 }
 
 
-
+    
 booksName <- function(){
   
   page <- read_html(url)  
@@ -38,7 +41,7 @@ booksName <- function(){
   
   
 }
-
+#
 
 
 
@@ -54,11 +57,14 @@ booksLinks <- function(){
 
 
 #scraping the links for available books
+
 df <- data.frame("Book"= booksName(),
                  "Author"= booksAuthors(),
                  "Link" = booksLinks())
 
 
+
+print(df$Link)
 #write.csv(df, file = "booksName.csv")
   
 
