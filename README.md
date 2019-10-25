@@ -45,7 +45,7 @@ In this script, all the book data is downloaded and stored as R object.
 `parseChapterElement` function accepts urls as  a input and gives output of div element of link  
 
 ### 3.Removing duplicated parts  
-##`nested_book.R` 
+`nested_book.R`  
 
 When we download all the data of the book, we see that the subchapters are duplicated because we are using fragments identifier. (eg:2.1 SubChapter occurs 2 times,
 2.2.1 SubSubChapter occurs 3 times)
@@ -56,24 +56,29 @@ When we download all the data of the book, we see that the subchapters are dupli
 --|--|--|2.2.1 SubSubChapter  
 --|--|--|2.2.2 SubSubChapter  
 
-### 4. Splitting Text and Code Blocks
-`merge_and_sort.R`  
+we just need to delete all the subchapters to extract the  only data in the 2nd chapter.
+### 4. Splitting Text and Code Blocks  
+`merge_and_sort.R`    
+
 The text and code blocks are seperated  and assigned to a  named list element.("HTML" or "R")
   
 
 
 ### 5.Cleaning R Code Output  
-`remove_comments.R`
+`remove_comments.R`  
+
 In this section, the code blocks are read line by line, the code outputs are deleted.
 Lines starting with `"#>"` are the code output.Lines starting with `"#"` comments.
 
 ### 6.Relative / Absolute Links
-`html_links.R`
+`html_links.R`  
+
 In this section, chapter names at the beginning of relative links have been removed.(eg: `href = "chaptername#subchaptername"` to href = `"#subchaptername"`).Because chapters are exported as a stage in melda.io json format.The `target = _blank` has been added to all absolute links in the book  to open links on a new tab.
 
 
 ### 7.Export as melda.io json format
-`export_as_melda_json.R` 
+`export_as_melda_json.R`  
+
 In this section example of melda.io json file is converted to  R object using `jsonlite` library.Then the number of cells to be generated  is determined by using `getCellNumber` function.
 (eg: 3. chapter has 26 named "HTML"  and  14 named "R" list element, we need 40  cell for JSON file. getCellNumber(3) == 40).R list is created that contains as many cells as the number of named list elements in the book. Finally the R object is exported as a  melda.io json file.
 
