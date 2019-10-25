@@ -1,9 +1,9 @@
 # BooksForR
-Scraping executable R Books for melda.io platform!
+Scraping  R Books and making executable on [melda.io](https://www.melda.io) platform!
 
 ## Introduction
 
-In this project, it is aimed to download the data of current open source R books and convert them to [melda.io](https://www.melda.io) json   format by using R.  
+In this project, it is aimed to download the data of current open source R books and convert them to [melda.io](https://www.melda.io) json   format by using R.    [melda.io](https://www.melda.io)  is a new, innovative, web-based cloud-native data science platform. You can create data analysis projects with R, python, publish your work, interact and co-create with others.
 
 The R books are taken from [BOOKDOWN](bookdown.org)  
 
@@ -31,7 +31,7 @@ Type the cleanComments option and chapter numbers that will export as   [melda.i
 
 
 ### 1.Extracting Urls in Book  
-##`get_all_urls.R`
+`get_all_urls.R`
 In this script, a data fram	e named `chapterURLS` containing all links in the book, title and subtitle names has been created.
 The href attribute of anchor elements extracted using the `html_node`  and `html_attr` function.
 `getChapters` function  returns all chapter/subchapter data as  an output 
@@ -59,23 +59,23 @@ When we download all the data of the book, we see that the subchapters are dupli
 ### 4. Splitting Text and Code Blocks
 `merge_and_sort.R`  
 The text and code blocks are seperated  and assigned to a  named list element.("HTML" or "R")
-
+  
 
 
 ### 5.Cleaning R Code Output  
 `remove_comments.R`
 In this section, the code blocks are read line by line, the code outputs are deleted.
-Lines starting with "#>" are the code output.Lines starting with "#" comments.
+Lines starting with `"#>"` are the code output.Lines starting with `"#"` comments.
 
 ### 6.Relative / Absolute Links
 `html_links.R`
-In this section, chapter names at the beginning of relative links have been removed.(eg: href = "chaptername#subchaptername" to href = "#subchaptername").Because chapters are exported as a stage in melda.io json format.The "target = _blank" has been added to all absolute links in the book  to open links on a new tab.
+In this section, chapter names at the beginning of relative links have been removed.(eg: `href = "chaptername#subchaptername"` to href = `"#subchaptername"`).Because chapters are exported as a stage in melda.io json format.The `target = _blank` has been added to all absolute links in the book  to open links on a new tab.
 
 
 ### 7.Export as melda.io json format
-`export_as_melda_json.R`
-In this section example of melda.io json file is converted to  R object using 'jsonlite' library.Then the number of cells to be generated  is determined by using getCellNumber function.
-(eg: 3. chapter has 26 named "HTML"  and  14 named "R" list element, we need 40  cell for JSON file. getCellNumber(3) == 40).R list is created that contains as many cells as the number of named list elements in the book. Finally the R object is exported as a  json file.
+`export_as_melda_json.R` 
+In this section example of melda.io json file is converted to  R object using `jsonlite` library.Then the number of cells to be generated  is determined by using `getCellNumber` function.
+(eg: 3. chapter has 26 named "HTML"  and  14 named "R" list element, we need 40  cell for JSON file. getCellNumber(3) == 40).R list is created that contains as many cells as the number of named list elements in the book. Finally the R object is exported as a  melda.io json file.
 
 
   
