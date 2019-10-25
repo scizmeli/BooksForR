@@ -14,3 +14,9 @@ Some of the popular R books are:
 -[Advanced R](https://adv-r.hadley.nz/)  
 -[R Markdown: The Definitive Guide](https://bookdown.org/yihui/rmarkdown/)  
 -[R for Data Science](https://r4ds.had.co.nz/)
+
+
+
+## Where to get  
+with   git by running:
+  git clone https://github.com/suleymantaspinar/BooksForR.git
