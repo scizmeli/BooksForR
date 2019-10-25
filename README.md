@@ -18,5 +18,5 @@ Some of the popular R books are:
 
 
 ## Where to get  
-with    git     by running:
-  git clone https://github.com/suleymantaspinar/BooksForR.git
+with    `git`     by running:
+  `git clone https://github.com/suleymantaspinar/BooksForR.git`
