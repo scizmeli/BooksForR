@@ -23,10 +23,10 @@ with    `git`     by running:
 
 
 ### How to Run
-`download_book.R` 
+`Rscript download_book.R` 
 Type the one of the open source book url  from [BOOKDOWN](bookdown.org)  
 
-`extract_book.R`
+`Rscript extract_book.R`
 Type the cleanComments option and chapter numbers that will export as   [melda.io](https://www.melda.io) json  format. 
 
 
