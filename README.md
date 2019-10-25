@@ -1,4 +1,4 @@
-# BooksForR
+# Executable R Books for Melda.io
 Scraping  R Books and making executable on [melda.io](https://www.melda.io) platform!
 
 ## Introduction
@@ -82,7 +82,13 @@ In this section, chapter names at the beginning of relative links have been remo
 In this section example of melda.io json file is converted to  R object using `jsonlite` library.Then the number of cells to be generated  is determined by using `getCellNumber` function.
 (eg: 3. chapter has 26 named "HTML"  and  14 named "R" list element, we need 40  cell for JSON file. getCellNumber(3) == 40).R list is created that contains as many cells as the number of named list elements in the book. Finally the R object is exported as a  melda.io json file.
 
+## Published Books
 
+-[Fundamentals of Data Visualizaion](https://www.melda.io/projects/fundamentals-of-data-visualizations/)  
   
-
+-[Tidy Text Mining](https://www.melda.io/projects/tidy-text-mining/)  
+  
+-[R Packages](https://www.melda.io/projects/r-packages-hadley-wickham/)
+   
+-[R for Data Science](https://www.melda.io/projects/r-for-data-science-hadley-wickham/)
 
