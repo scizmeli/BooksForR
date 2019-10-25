@@ -8,7 +8,7 @@ In this project, it is aimed to download the data of current open source R books
 The R books are taken from [BOOKDOWN](bookdown.org)
 
 
--[Geocomputation with R](https://geocompr.robinlovelace.net/)
--[Text Mining with R](https://tidytextmining.com/)
--[Data Science at the Command Line](https://www.datascienceatthecommandline.com/)
--[R Markdown: The Definitive Guide](https://bookdown.org/yihui/rmarkdown/)
+-[Geocomputation with R](https://geocompr.robinlovelace.net/)  
+-[Text Mining with R](https://tidytextmining.com/)  
+-[Data Science at the Command Line](https://www.datascienceatthecommandline.com/)  
+-[R Markdown: The Definitive Guide](https://bookdown.org/yihui/rmarkdown/)  
