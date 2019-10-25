@@ -20,3 +20,11 @@ Some of the popular R books are:
 ## Where to get  
 with    `git`     by running:
   `git clone https://github.com/suleymantaspinar/BooksForR.git`
+
+
+## How to Run
+`download_book.R` 
+Type the one of the open source book url  from [BOOKDOWN](bookdown.org)  
+
+`extract_book.R`
+Type the cleanComments option and chapter numbers that will export as   [melda.io](https://www.melda.io) json  format. 
