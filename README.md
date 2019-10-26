@@ -41,14 +41,13 @@ The href attribute of anchor elements extracted using the `html_node`  and `html
 `get_all_book.R`
 In this script, all the book data is downloaded and stored as R object.  
 
-`parseSubChapterElement` function accepts urls as  a input and give the outputs of div elements.  
-`parseChapterElement` function accepts urls as  a input and gives output of div element of link  
+`parseSubChapterElement` function accepts urls as  a input and gives id of div element as output.  
+`parseChapterElement` function accepts urls as  a input and gives id of div element as output.
 
 ### 3.Removing duplicated parts  
 `nested_book.R`  
 
-When we download all the data of the book, we see that the subchapters are duplicated because we are using fragments identifier. (eg:2.1 SubChapter occurs 2 times,
-2.2.1 SubSubChapter occurs 3 times)
+When we download all the data of the book, we see that the subchapters are duplicated because we are using fragments identifier. (eg:2.1 SubChapter occurs 2 times,  2.2.1 SubSubChapter occurs 3 times)
 
 --| 2. Chapter  
 --|--| 2.1 SubChapter  
