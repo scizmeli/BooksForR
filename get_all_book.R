@@ -1,3 +1,5 @@
+#!/usr/bin/env Rscript
+
 library(httr)
 library(rvest)
 library(tidyverse)
@@ -47,52 +49,67 @@ parseChapterElements <- function(x){
 getSubChapters <- function(x){
   if(chapterURLS[x,3] != "Chapter"){
     
-    random <- runif(1,min=15,max=65)
+    random <- runif(1,min=25,max=75)
     
-    print(paste("Sleeping time is:", " ",random, "seconds" , sep = ""))
+    cat(paste("This is",chapterURLS[x,3], " extracted\n after ",random," secs",sep = ""))
     
     Sys.sleep(random)
-    
+
     page <- read_html(chapterURLS[x,1])
-    
+
     node <- html_node(page, paste("#",parseSubChapterElements(x),sep = ""))
-    
+
     as(xml_children(node), "character")
     
 
+  }else{
+
+    rnd <- runif(1,min = 28,max=65) #generating random sleep sec for not to be banned by the server
+
+    print(paste(chapterURLS[x,2],"  ","after " , rnd, " seconds"))
+
+    Sys.sleep(rnd)
+
+    cat(paste("This is",chapterURLS[x,3], "extracted\n after ",rnd," secs",sep = ""))
+
+    page <- read_html(chapterURLS[x,1])
+
+    node <- html_node(page, paste("#",parseChapterElements(x),sep = ""))
+
+    as(xml_children(node), "character")
   }
 }
 
-#getting chapters text and code
-getChapters <- function(x){
-  print(paste("i is ", i , " and  url is: ", chapterURLS[i,1], " \n the json is "))
-  
-  rnd <- runif(1,min = 35,max=124) #generating random sleep sec for not to be banned by the server
-  
-  print(paste("system will sleep " , rnd, " seconds"))
-  
-  Sys.sleep(rnd)
-  
-  print(paste("This ",chapterURLS[[i,2]], "is a chapter",sep = ""))
-  
-  page <- read_html(chapterURLS[i,1])
-  
-  node <- html_node(page, paste("#",parseChapterElements(i),sep = ""))
-  
-  as(xml_children(node), "character")  
-}-
+# getting chapters text and code
+# getChapters <- function(x){
+  # if(chapterURLS[x,3] == "Chapter"){
+    # print(paste("ChapterName is ", chapterURLS[x,2] , " and  url is: ", chapterURLS[x,1], sep=""))
+    # 
+    # rnd <- runif(1,min = 3,max=15) #generating random sleep sec for not to be banned by the server
+    # 
+    # print(paste(chapterURLS[x,2],"  ","after " , rnd, " seconds"))
+    # 
+    # Sys.sleep(rnd)
+    # 
+    # print(paste("This ",chapterURLS[x,2], "is a chapter",sep = ""))
+    # 
+    # page <- read_html(chapterURLS[x,1])
+    # 
+    # node <- html_node(page, paste("#",parseChapterElements(x),sep = ""))
+    # 
+    # as(xml_children(node), "character")  
+#   }
+# }-
 
 
 
 
 # scraping and saving the book data
-for(i in 1:length(chapterURLS[,1])){
-  
-  subChapterList[[i]] <- tryCatch(getSubChapter(i),error = function(e){"NA"})
-  
-  subChapterList[[i]] <- tryCatch(getChapters(i),error = function(e){"NA"})
+for(i in 1:length(subChapterList)){
+  subChapterList[[i]] <- tryCatch(getSubChapters(i),error = function(e){"NA"})
   
 }
+
 
 
 

@@ -1,3 +1,5 @@
+#!/usr/bin/env Rscript
+
 #scraping the links for available books
 library(httr)
 library(rvest)
@@ -6,8 +8,7 @@ library(dplyr)
 library(XML)
 
 #Getting all href links in the li element.
-# url <- "https://otexts.com/fpp2"
-
+#url <- "https://r-graphics.org"
 
 getBookName <- function(BookUrl){
   page <- read_html(BookUrl)
@@ -23,7 +24,7 @@ bookname <- getBookName(url)
 #This function scraps all chapter url and  subchapter urls.
 chapterLink <- function(){
   rnd <- runif(1,min = 2,max=4)
-  print(paste("system will sleep " , rnd, " seconds"))
+  cat(paste(url, "is scraping  \nwait: " , rnd, " seconds"))
   Sys.sleep(rnd)
   page <- read_html(url)
   nodes <- html_nodes(page,'li.chapter a')
@@ -36,10 +37,10 @@ chapterURLS <- data.frame(links = chapterLink())
 anyNA(chapterURLS)
 chapterURLS[,1] <-as.character(chapterURLS[,1])
 
+cat("ChapterURL dataframe created")
 
 #creating new column
 chapterURLS$ChapterName<- chapterURLS$links
-
 
 
 #we can reach the all chapter names using any of the links
@@ -79,23 +80,24 @@ for(i in 1:length(chapterURLS[,1])){
 
 if(!dir.exists ( file.path(bookname))){
   dir.create( file.path(bookname) )
-  cat("Directory created")
+  cat( paste( "Directory created" ,file.path(bookname),sep="") )
 }else{
-  cat("Directory exist")
+  cat( paste( "Directory exist" ,file.path(bookname),sep="") )
 }
 
 
 if(!dir.exists ( file.path(bookname,"Images"))){
   
   dir.create( file.path(bookname,"Images") )
-  cat("Directory created")
+  cat( paste( "Directory created\n" , " ",file.path(bookname),sep="") )
 }else{
-  cat("Directory exist")
-}
+  cat( paste( "Directory exist\n" ," ",file.path(bookname),sep="") )
+  }
 
 
 
 save.image( paste(file.path(bookname ,"Images"), "/all_book_url",Sys.Date(),".RData",sep ="") )
 
 # new_folder_path <- paste(getwd(),"new_folder",sep = "/")      
+
 

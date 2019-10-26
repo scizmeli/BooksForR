@@ -4,10 +4,13 @@
 #available url link
 source("booksName.R")
 
-cat("Enter a book url ");
-url <- readLines("stdin",n=1);
+cat("Enter the number of  book url ");
+
+urlnumber <- readLines("stdin",n=1);
+url <- df[urlnumber,3]
 cat("You entered")
- str(url);
+ 
+str(url);
 cat( "\n" )
 
 
@@ -21,12 +24,12 @@ source("get_all_book.R")
 
 
 #splitting nested part of books
-source("nested_book.R")
+#source("nested_book.R")
 
 
 #merging text / code blocks
-source("merge_and_sort.R")
+#source("merge_and_sort.R")
 
 
 #handling relative  / absolute links in book
-source("html_link")
+#source("html_link.R")
