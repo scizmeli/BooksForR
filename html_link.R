@@ -1,6 +1,8 @@
+library(rvest)
+library(xml)
 absoluteImgLink  <-  FALSE
 # Checking for not closed div brackets.closing div brackets in Chapter poarts!
-for( a in 3:length( jsonList ) ){
+for( a in 1:length( jsonList ) ){
   for( b in 1:length( jsonList[[a]]) ){
     if( chapterURLS[a,3]  == "Chapter" && !grepl( "</div>", substr(jsonList[[a]][[b]], nchar(jsonList[[a]][[b]]) - 10, nchar(jsonList[[a]][[b]]))) ){
       tmp <- names(jsonList[[a]][[b]]) 
@@ -45,7 +47,7 @@ for( a in 1:length(jsonList) ){
 #redirecting urls changing  href = "chaptername#subchaptername" to href = "#subchaptername"
 for( a in 1:length(jsonList) ){
   for( b in 1:length(jsonList[[a]]) ){
-    if(grepl( "href=", jsonList[[a]][[b]] )){
+    if(length(jsonList[[a]]) != 0 && grepl( "href=", jsonList[[a]][[b]] )){
       
       page <- read_html( jsonList[[a]][[b]] )
       
@@ -87,7 +89,7 @@ for( a in 1:length(jsonList) ){
 ##Adding target_blank to the html attribute
 for( a in 1:length(jsonList) ){
   for( b in 1:length(jsonList[[a]]) ){
-    if(grepl( "href=", jsonList[[a]][[b]] )){
+    if(length(jsonList[[a]]) != 0 && grepl( "href=", jsonList[[a]][[b]] )){
       
       page <- read_html( jsonList[[a]][[b]] )
       
@@ -145,12 +147,12 @@ for( a in 1:length(jsonList) ){
 }
 
 
-
+absoluteImgLink <- TRUE
 ##Adding book links to the img link
 if(absoluteImgLink  == TRUE){
   for( a in 3: ( length(jsonList) -1 ) ) {
     for( b in 1:length(jsonList[[a]]) ){
-      if(grepl( "img src", jsonList[[a]][[b]] )){
+      if(length(jsonList[[a]]) != 0 && grepl( "img src", jsonList[[a]][[b]] )){
         
         page <- read_html( jsonList[[a]][[b]] )
         
@@ -163,28 +165,12 @@ if(absoluteImgLink  == TRUE){
         
         for( i in 1:length(nodes) ) {
           temp <- vector( mode="list", length =  length(nodes) )
+          z <- paste("<img src=",'\"',sep="")
+          sentence<-paste(z,url,"/", sep = "")
           
-          
-          if(grepl("img src" ,substr(nodes[[i]] , 1 , 17) )){
-            z <- paste("<img src=",'\"',sep="")
-            sentence<-paste(z,url,"/", sep = "")
-            
-            temp[[i]] <- gsub(z,sentence,nodes[[i]])
-            
-            #escaping speacial characters
-            nodes[[i]] <- gsub("([+.])","\\\\\\1", nodes[[i]])
-            
-            #applying the regexp to jsonList
-            tempList <-gsub( nodes[[i]], temp[[i]] , jsonList[[a]][[b]] )
-            
-            jsonList[[a]][[b]] <- tempList
-            
-            print( paste( "done","A is:", a ,"B is:" , b , "I is:"  , i))
-            
-            temp[[i]] <- "lolo"
-            print(paste("NNNNOOTTdone","A is:",a,"B is:", b, "I is:" ,i))
-            
-            
+          temp[[i]] <- gsub(z,sentence,nodes[[i]])
+          jsonList[[a]][[b]] <- gsub( nodes[[i]], temp[[i]] , jsonList[[a]][[b]] ,fixed = TRUE)
+          print("Relative image converted to absolute")
           }
           
         }
@@ -196,4 +182,4 @@ if(absoluteImgLink  == TRUE){
   }
   
   
-}
+

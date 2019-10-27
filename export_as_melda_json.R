@@ -3,13 +3,12 @@ library(jsonlite)
 #Hole book in one JSON
 tjson <- jsonlite::fromJSON("input.json",simplifyDataFrame = FALSE)
 
-chapterNum <- 32 #number of chapters will be exported as melda.io json format
-projectTitle <- paste(bookname , "example" , sep="") #title of melda url that
+projectTitle <- paste(bookname , "example72" , sep="") #title of melda url that
 
 #this function gives indices of chapters
 getChapterIndex <- function(){
   indexNums <<- list()
-  for(i in 2:length(jsonList)){
+  for(i in 1:length(jsonList)){
     if(chapterURLS[i,3] == "Chapter"){
       indexNums <<- append(indexNums,i)
     }
@@ -18,6 +17,7 @@ getChapterIndex <- function(){
 }
 
 getChapterIndex()
+chapterNum <- length(indexNums) #number of chapters will be exported as melda.io json format
 
 #this function calculates how many cells in one chapter.
 getCellNumber <- function(x){
@@ -96,7 +96,7 @@ for(x in 1:chapterNum){
       
       for(t in 1:length(jsonList[[i]])){
         
-        if(TRUE){
+        if(names(jsonList[[i]][[t]]) == "HTML"){
           print(paste("BEGINING HTML PART","j:" , j, "i:" , i, "and t is:" , t," x is:" , x))
           
           #code:
@@ -104,7 +104,7 @@ for(x in 1:chapterNum){
           
           
           #language:
-          tjson$project$stages[[x]][[8]][[j]][[4]] <- "HTML"
+          tjson$project$stages[[x]][[8]][[j]][[4]] <- names(jsonList[[i]][[t]])
           
           
           # index:
@@ -126,7 +126,7 @@ for(x in 1:chapterNum){
           z <- z +1
           j <- j + 1
           
-        }else if (FALSE){
+        }else if (names(jsonList[[i]][[t]]) == "R"){
           print(paste("BEGINING R PART","j:" , j, "i:" , i, "and t is:" , t," x is:" , x))
           
           #code:
@@ -308,7 +308,7 @@ for(x in 1:chapterNum){
       }
 
     }
-    
+
   }
 }
 
@@ -335,6 +335,6 @@ if(!dir.exists ( file.path(bookname,"json"))){
   cat("Directory exist")
 }
 
-write(minify(output),paste(file.path(bookname,"json"),"/", bookname,chapterNum ,".json",sep = ""))
+write(minify(output),"lol.json")
 
 

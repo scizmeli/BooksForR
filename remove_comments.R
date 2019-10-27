@@ -1,11 +1,11 @@
 ## run if Clean Comment is TRUE 
-cleanComment = FALSE
+cleanComment = TRUE
 #if sourceCode r attributes does not contains "sourceLine"
 
 #check for type of code attribute
 for(a in 1:length(jsonList)){
   for(b in 1:length(jsonList[[a]])){
-    if( names(jsonList[[a]][[b]]) == "R")
+    if( length(jsonList[[a]]) != 0 && names(jsonList[[a]][[b]]) == "R")
       if(grepl("sourceLine",jsonList[[a]][[b]])) {
         codeType <- "sourceLine"
         break()
@@ -21,7 +21,7 @@ if(codeType == "spanLine" && cleanComment == TRUE){
   
   for(a in 1:length(jsonList)){
     for(b in 1:length(jsonList[[a]])){
-      if( names(jsonList[[a]][[b]]) == "R" && grepl("sourceCode r",jsonList[[a]][[b]])){
+      if( length(jsonList[[a]]) != 0 && names(jsonList[[a]][[b]]) == "R" && grepl("sourceCode r",jsonList[[a]][[b]])){
         
         print(paste("a is:" , a , "  b is ", b))
         page <- read_html(jsonList[[a]][[b]])
@@ -69,7 +69,7 @@ if(codeType == "spanLine" && cleanComment == TRUE){
 if(codeType == "sourceLine" && cleanComment == TRUE){
   for(a in 1:length(jsonList)){
     for(b in 1:length(jsonList[[a]])){
-      if(names(jsonList[[a]][[b]]) == "R" && grepl("sourceCode r",jsonList[[a]][[b]])){
+      if(length(jsonList[[a]]) != 0 && names(jsonList[[a]][[b]]) == "R" && grepl("sourceCode r",jsonList[[a]][[b]])){
         
         print(paste("a is:" , a , "  b is ", b))
         page <- read_html(jsonList[[a]][[b]])
@@ -104,12 +104,17 @@ if(codeType == "sourceLine" && cleanComment == TRUE){
         
         jsonList[[a]][[b]] <- ""
         #remove html tags
-        for(i in 1:length(code)){
-          code[[i]] <- paste(html_text(read_html(code[[i]])),"\n",sep="")
-          jsonList[[a]][[b]]<- paste(jsonList[[a]][[b]],code[[i]])
-          names(jsonList[[a]][[b]]) <- "R"
+        if( length(code) != 0 ){
+          for(i in 1:length(code)){
+            code[[i]] <- paste(html_text(read_html(code[[i]])),"\n",sep="")
+            jsonList[[a]][[b]]<- paste(jsonList[[a]][[b]],code[[i]])
+            names(jsonList[[a]][[b]]) <- "R"
+          }
+          
+        }else{
+          jsonList[[a]][[b]] <- "NULL"
+          names(jsonList[[a]][[b]]) <- "HTML"
         }
-        
         
         
         
@@ -120,6 +125,18 @@ if(codeType == "sourceLine" && cleanComment == TRUE){
   }
   
 }
+
+
+#if a r block contains all comments , remove it.
+for(a in 1:length(jsonList)){
+  for(b in 1:length(jsonList[[a]])){
+  if(jsonList[[a]][[b]] == "NULL"){
+    paste(a," and ",b)
+    jsonList[[a]][[b]] <- NULL
+  }
+      }
+}
+
 
 
 
