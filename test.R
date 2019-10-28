@@ -14,3 +14,7 @@ page <- read_html( chapterURLS[1,1])
 node <- html_node(page, "#header")
 jsonList[[1]][[1]] <- as(node,"character")
 names(jsonList[[1]][[1]]) <- "HTML"
+
+save.image( paste(file.path(getBookName(url),"Images"), "/all_book_tested",".RData" , sep ="") )
+
+

@@ -1,3 +1,11 @@
+#!/usr/bin/env Rscript
+
+library(httr)
+library(rvest)
+library(tidyverse)
+library(dplyr)
+library(XML)
+
 temp <- vector(mode = "list",length= 70)
 
 #creating list to export as
@@ -123,4 +131,3 @@ for( i in 1:length(jsonList) ){
 }
 
 
-getwd()

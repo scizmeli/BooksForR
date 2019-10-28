@@ -112,7 +112,7 @@ if(codeType == "sourceLine" && cleanComment == TRUE){
           }
           
         }else{
-          jsonList[[a]][[b]] <- "NULL"
+          jsonList[[a]][[b]] <- html_text(read_html(subChapterList[[a]][[b]]) )
           names(jsonList[[a]][[b]]) <- "HTML"
         }
         
@@ -127,15 +127,6 @@ if(codeType == "sourceLine" && cleanComment == TRUE){
 }
 
 
-#if a r block contains all comments , remove it.
-for(a in 1:length(jsonList)){
-  for(b in 1:length(jsonList[[a]])){
-  if(jsonList[[a]][[b]] == "NULL"){
-    paste(a," and ",b)
-    jsonList[[a]][[b]] <- NULL
-  }
-      }
-}
 
 
 

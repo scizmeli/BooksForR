@@ -1,20 +1,25 @@
 library(rvest)
-library(xml)
-absoluteImgLink  <-  FALSE
+library(XML)
+
+absoluteImgLink <- TRUE
+checkDivBracket <- FALSE
+
 # Checking for not closed div brackets.closing div brackets in Chapter poarts!
-for( a in 1:length( jsonList ) ){
-  for( b in 1:length( jsonList[[a]]) ){
-    if( chapterURLS[a,3]  == "Chapter" && !grepl( "</div>", substr(jsonList[[a]][[b]], nchar(jsonList[[a]][[b]]) - 10, nchar(jsonList[[a]][[b]]))) ){
-      tmp <- names(jsonList[[a]][[b]]) 
-      print("Heyy")
-      jsonList[[a]][[b]] <- paste(jsonList[[a]][[b]], "</div>",sep="")
-      names(jsonList[[a]][[b]]) <- tmp 
-    }else{
-      print("this chapter has no unclosed div chapters ")
+if(checkDivBracket == TRUE){
+  for( a in 1:length( jsonList ) ){
+    for( b in 1:length( jsonList[[a]]) ){
+      if( chapterURLS[a,3]  == "Chapter" && !grepl( "</div>", substr(jsonList[[a]][[b]], nchar(jsonList[[a]][[b]]) - 10, nchar(jsonList[[a]][[b]]))) ){
+        tmp <- names(jsonList[[a]][[b]]) 
+        print("Heyy")
+        jsonList[[a]][[b]] <- paste(jsonList[[a]][[b]], "</div>",sep="")
+        names(jsonList[[a]][[b]]) <- tmp 
+      }else{
+        print("this chapter has no unclosed div chapters ")
+      }
     }
   }
+  
 }
-
 
 
 #adding div elements with their id's to subchapter and subsubchapter
@@ -147,7 +152,6 @@ for( a in 1:length(jsonList) ){
 }
 
 
-absoluteImgLink <- TRUE
 ##Adding book links to the img link
 if(absoluteImgLink  == TRUE){
   for( a in 3: ( length(jsonList) -1 ) ) {
@@ -181,5 +185,19 @@ if(absoluteImgLink  == TRUE){
     
   }
   
-  
+
+
+##Comment the install.packages code
+for(a in 1:length(jsonList)){
+  for(b in 1:length(jsonList[[a]])){
+    if(names(jsonList[[a]][[b]])  == "R" && grepl(paste("install.packages"), jsonList[[a]][[b]]) && grepl("#",jsonList[[a]][[b]]) != TRUE){
+      print(paste("There is a R code cell includes install.package:   ",a," :a ", b, " :b "))
+      jsonList[[a]][[b]] <- gsub("install.packages",
+                                 "#install.packages",jsonList[[a]][[b]])
+      names( jsonList[[a]][[b]] ) <- "R"
+    }else{
+      # print("There is no R code cell includes install.package")
+    }
+  }
+}
 

@@ -1,24 +1,4 @@
-library(jsonlite)
-
-#Hole book in one JSON
-tjson <- jsonlite::fromJSON("input.json",simplifyDataFrame = FALSE)
-
-projectTitle <- paste(bookname , "example72" , sep="") #title of melda url that
-
-#this function gives indices of chapters
-getChapterIndex <- function(){
-  indexNums <<- list()
-  for(i in 1:length(jsonList)){
-    if(chapterURLS[i,3] == "Chapter"){
-      indexNums <<- append(indexNums,i)
-    }
-  }
-  indexNums
-}
-
-getChapterIndex()
-chapterNum <- length(indexNums) #number of chapters will be exported as melda.io json format
-
+projectTitle <- paste(bookname , "-",chapterNum , sep="") #title of melda url that
 #this function calculates how many cells in one chapter.
 getCellNumber <- function(x){
   if(x != length(indexNums)){
@@ -79,7 +59,7 @@ GOO <- function(x){
   
   tjson$project$title <<- tjson$name
   
-  tjson$project$uri <<- tolower(paste("suleyman-taspinar/",tjson$name,sep = ""))
+  tjson$project$uri <<- tolower(paste(uri_user_name,"/",tjson$name,sep = ""))
   
 }
 
@@ -335,6 +315,5 @@ if(!dir.exists ( file.path(bookname,"json"))){
   cat("Directory exist")
 }
 
-write(minify(output),"lol.json")
-
+write(minify(output),paste(file.path(bookname,"json"),"/", bookname,chapterNum ,".json",sep = ""))
 

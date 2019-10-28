@@ -1,7 +1,6 @@
 #!/usr/bin/env Rscript
 
 
-#install.packages("XML")
 
 library(httr)
 library(rvest)
