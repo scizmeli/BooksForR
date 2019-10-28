@@ -9,11 +9,11 @@ The R books are taken from [BOOKDOWN](https://bookdown.org)
 
 
 Some of the popular R books are:  
--[Hands-On Programming with R](https://rstudio-education.github.io/hopr/)  
--[R Packages](https://r-pkgs.org/)  
--[Advanced R](https://adv-r.hadley.nz/)  
--[R Markdown: The Definitive Guide](https://bookdown.org/yihui/rmarkdown/)  
--[R for Data Science](https://r4ds.had.co.nz/)
+*[Hands-On Programming with R](https://rstudio-education.github.io/hopr/)  
+*[R Packages](https://r-pkgs.org/)  
+*[Advanced R](https://adv-r.hadley.nz/)  
+*[R Markdown: The Definitive Guide](https://bookdown.org/yihui/rmarkdown/)  
+*[R for Data Science](https://r4ds.had.co.nz/)
 
 
 
@@ -23,12 +23,16 @@ with    `git`     by running:
 
 
 ### How to Run
-`Rscript download_book.R` 
-Type the one of the open source book url  from [BOOKDOWN](bookdown.org)  
+Type `Rscript download_book.R` on command line. 
+Type the one of the open source book url  from [BOOKDOWN](bookdown.org). The    `download_book.R` will download the book and save the results as R environment (`all_book.RData`) 
 
-`Rscript extract_book.R`
-Type the cleanComments option and chapter numbers that will export as   [melda.io](https://www.melda.io) json  format. 
+Type `Rscript manipulate_book.R` on command line. 
 
+` manipulate_book.R` scripts changes the relative links to absolute links and add's the "target=_blank" attribute to all anchor elements. 
+
+
+Type `Rscript export_book.R` on command line.
+Type your user name on [melda](app.melda.io) with dashes ( eg: suleyman-taspinar) and type the number chapters you want to export as melda.io json.
 
 ### 1.Extracting Urls in Book  
 `get_all_urls.R`
